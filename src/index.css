@@ -1,0 +1,217 @@
+* {
+  box-sizing: border-box;
+  font-family: monospace, Courier, 'Courier New';
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #ccc;
+}
+
+.app {
+  margin: 0.5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 240px;
+}
+
+.dialog {
+  background: #fff;
+  margin: auto;
+  padding: 1rem;
+  align-items: center;
+  border: 2px solid #000;
+  width: 90%;
+  max-width: 600px;
+}
+
+.dialog>div {
+  padding: 0.5rem;
+}
+
+.dialog>div.logs {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  background: #000;
+  color: #afa;
+}
+
+.filelist {
+  background: #fff;
+  border-top: 2px solid #000;
+  overflow-y: scroll;
+  padding: 0.5rem 0;
+  flex:1;
+}
+
+.fileRow {
+  display: grid;
+  grid-template-columns: auto 90px;
+  padding: 0.5rem 1rem;
+  color: #000;
+}
+
+.fileRow.info {
+  background: #eee;
+  font-size: smaller;
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+
+.fileRow>div {
+  overflow: hidden;
+  overflow-wrap: break-word;
+  text-align: left;
+  color: #555;
+}
+
+.fileRow>div:last-child {
+  text-align: right;
+  white-space: nowrap;
+  color: #000;
+}
+
+.fileRow:hover {
+  background: #eee;
+}
+
+.fileRow a {
+  cursor: pointer;
+  color: #000;
+}
+
+.fileRow a:hover {
+  color: #00f;
+}
+
+.fileRow:hover a {
+  text-decoration: underline;
+}
+
+.dialog.drag {
+  background: #ffd;
+}
+
+button {
+  display: block;
+  border: 2px solid #000;
+  cursor: pointer;
+  text-align: center;
+  color: #000;
+  background: #fff;
+  width: 100%;
+  padding: 0.5rem;
+}
+.dialog button {
+  color: #fff;
+  background: #000;
+}
+
+button:hover {
+  color: #000;
+  background: #ffd;
+}
+
+button:active {
+  color: #000;
+  background: #ffb;
+}
+
+
+.app>div.archive {
+  border: 2px solid #000;
+  color: #fff;
+  overflow-y: hidden;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.app>div.archive>.title {
+  border: 2px solid transparent;
+  background: #000;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.app>div.archive>.title>div:first-child {
+  overflow: hidden;
+  overflow-wrap: break-word;
+  padding-right: 1rem;
+}
+.app>div.archive>.title>div:last-child {
+  white-space: nowrap;
+}
+
+.app>div.archive>.filter {
+  background: #eee;
+  display: flex;
+  justify-content: space-between;
+  padding: 0rem;
+}
+
+.app>div.archive>.filter button {
+  max-width: 120px;
+  margin: 0.5rem;
+}
+
+input {
+  border: 2px solid transparent;
+  outline: 0;
+  padding: 1rem;
+  display: block;
+  background: #ee0;
+  background: transparent;
+  flex: 1;
+  min-width: 100px;
+}
+
+@keyframes blink {
+  0% {
+    color: #eee;
+  }
+
+  67% {
+    color: #eee;
+  }
+
+  68% {
+    color: #000;
+  }
+
+  100% {
+    color: #000;
+  }
+}
+
+.dialog b {
+  animation: blink 1s infinite;
+}
+
+.dialog b:nth-child(2) {
+  animation-delay: 0.33s;
+}
+
+.dialog b:nth-child(3) {
+  animation-delay: 0.66s;
+}
+
+.credits, .credits * {
+  text-align: center;
+  color: #777;
+  font-size: 11px;
+}
+.credits a:hover {
+  color:#000;
+}
