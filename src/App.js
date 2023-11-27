@@ -25,15 +25,20 @@ function App() {
     setAppState(PAGE_LOADING);
     setArchiveName(file.name);
     setLoadingLog("reading " + file.name);
-    const buffer = await file.arrayBuffer();
-    const bytes = new Uint8Array(buffer);
-    let rootFile = FileInfo("", bytes);
-    await unarchive(rootFile, onProgress);
-    let allfiles = rootFile.children === null ? [] : flatFiles(rootFile);
-    allfiles.sort(function (a, b) { return a.name.localeCompare(b.name); })
-    setFiles(allfiles);
-    setAppState(PAGE_ARCHIVE);
-    console.log(allfiles);
+    try {
+      const buffer = await file.arrayBuffer();
+      const bytes = new Uint8Array(buffer);
+      let rootFile = FileInfo("", bytes);
+      await unarchive(rootFile, onProgress);
+      let allfiles = rootFile.children === null ? [] : flatFiles(rootFile);
+      allfiles.sort(function (a, b) { return a.name.localeCompare(b.name); })
+      setFiles(allfiles);
+      setAppState(PAGE_ARCHIVE);
+      console.log(allfiles);
+    } catch(e) {
+      console.log(e);
+      setAppState(PAGE_START);
+    }
   }
 
   return (
