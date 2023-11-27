@@ -1,6 +1,7 @@
 import PageStart from './components/PageStart'
 import PageLoading from './components/PageLoading'
 import PageArchive from './components/PageArchive'
+import Credits from './components/Credits'
 import { useState } from 'react';
 import { unarchive, flatFiles, FileInfo } from './utils/unarchiver'
 
@@ -22,10 +23,10 @@ function App() {
 
   async function handleFileSelected(file) {
     setAppState(PAGE_LOADING);
+    setArchiveName(file.name);
     setLoadingLog("reading " + file.name);
     const buffer = await file.arrayBuffer();
     const bytes = new Uint8Array(buffer);
-    setArchiveName(file.name);
     let rootFile = FileInfo("", bytes);
     await unarchive(rootFile, onProgress);
     let allfiles = rootFile.children === null ? [] : flatFiles(rootFile);
@@ -37,12 +38,10 @@ function App() {
 
   return (
     <div className="app">
-      {appState === PAGE_START && (<><PageStart onFileSelected={handleFileSelected} />
-        <div className='credits'>Developed by Anton Teryaev, 2023<br />
-          <a href="https://github.com/ateryaev/archive-explorer">github.com</a></div></>
-      )}
+      {appState === PAGE_START && (<PageStart onFileSelected={handleFileSelected} />)}
       {appState === PAGE_LOADING && (<PageLoading name={archiveName} log={loadingLog} />)}
       {appState === PAGE_ARCHIVE && (<PageArchive name={archiveName} files={files} />)}
+      {appState !== PAGE_ARCHIVE && (<Credits />)}
     </div>)
 }
 
