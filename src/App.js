@@ -35,7 +35,7 @@ function App() {
       setFiles(allfiles);
       setAppState(PAGE_ARCHIVE);
       console.log(allfiles);
-    } catch(e) {
+    } catch (e) {
       console.log(e);
       setAppState(PAGE_START);
     }
