@@ -1,3 +1,8 @@
+:root {
+  --color-hover: #def;
+  --color-selected: #00f;
+}
+
 * {
   box-sizing: border-box;
   font-family: monospace, Courier, 'Courier New';
@@ -47,44 +52,30 @@ body {
 
 .filelist {
   background: #fff;
-  border-top: 2px solid #000;
+  xborder-top: 2px solid #000;
   overflow-y: scroll;
   flex: 1;
 }
 
 .preview .filelist {
-  background: #eee;
+  background: #ddd;
 }
 
-.fileRow:not(.info) {
+.fileRow {
   display: grid;
   grid-template-columns: auto 90px;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   color: #000;
   cursor: pointer;
-}
-
-.fileRow.info {
-  background: #eee;
-  color: gray;
-  margin: 0.5rem;
-  padding: 0.5rem;
-  display: flex;
-  justify-content: space-between;
+  margin: 0 0.5rem;
 }
 
 .fileRow.selected {
-  background: #880;
+  background: #44f;
   color: #fff;
 
   xcolor: #fff !important;
   xfont-weight: bold;
-}
-
-.preview .fileRow.info {
-  background: #fff;
-  position: sticky;
-  left: 0.5rem;
 }
 
 .fileRow>div {
@@ -99,8 +90,8 @@ body {
   white-space: nowrap;
 }
 
-.fileRow:not(.info):not(.selected):hover {
-  background: #ffd;
+.fileRow:not(.selected):hover {
+  background: var(--color-hover);
 }
 
 .dialog.drag {
@@ -123,16 +114,6 @@ button {
   background: #000;
 }
 
-.title button {
-  margin: -0.5rem;
-  padding: 0.5rem;
-  border: 0;
-  height: fit-content;
-  border: 0px solid #fff;
-  color: #fff;
-  background: #555;
-}
-
 button:hover {
   color: #000;
   background: #ffd;
@@ -146,6 +127,7 @@ button:active {
 
 .app>div.archive {
   border: 2px solid #000;
+  border-top: 0px solid #000;
   color: #fff;
   overflow-y: hidden;
   height: fit-content;
@@ -155,7 +137,7 @@ button:active {
 }
 
 .app>div.archive.preview {
-  flex: 2;
+  flex: 1;
 }
 
 .app>div.archive.hidden {
@@ -163,57 +145,204 @@ button:active {
 }
 
 .app>div.archive {
-  flex: 3;
+  flex: 1;
 }
 
-.app>div.archive>.title {
-  border: 2px solid transparent;
-  border-top: 0px solid #000;
-  background: #000;
+.title {
+  border: 0px solid transparent;
+  border-top: 2px solid #000;
+  border-bottom: 2px solid #000;
+  background: #777;
   color: #fff;
   display: flex;
   justify-content: space-between;
   padding: 1rem;
-
+  gap: 1rem;
+  box-shadow: 0 0 0px 2px rgba(255, 255, 255, 0.75);
+  z-index: 2;
 }
 
-.app>div.archive>.title>div:first-child {
+.title>div:first-child {
   overflow: hidden;
   overflow-wrap: break-word;
-  padding-right: 1rem;
 }
 
-.app>div.archive>.title>div:last-child {
-  white-space: nowrap;
+.app>div.archive .filter {
   display: flex;
-  gap: calc(1rem + 2px);
-  justify-content: end;
+  justify-content: space-between;
+  align-content: center;
+  color: #000;
+  gap: 0.5rem;
+  gap: 0;
+  position: sticky;
+  left: 0.5rem;
+  xtop: 0.5rem;
 }
 
-.app>div.archive.preview>.filter {
+.app>div.archive .filter:not(.info) {
+  top: 0.5rem;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.75)
+}
+
+.app>div.archive.preview .filter:not(.info) {
+  top: 0.5rem;
+  box-shadow: 0 0 0 2px rgba(221, 221, 221, 0.75);
+}
+
+.filelist .filter {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #bbb;
+  border-width: 2px;
+  background: #eee;
+}
+
+.infopanel {
+  margin: 0.5rem;
+  xborder: 1px solid red;
+  border-width: 2px;
+  xbackground: #eee;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: #000;
+}
+
+.infopanel>div>span {
+  display: inline-block;
+  border: 2px solid transparent;
+  padding: 0.5rem;
+}
+
+.infopanel button {
+  width: fit-content;
+}
+
+.infopanel .main {
+  flex: 1;
+}
+
+.infopanel>* {
+  display: flex;
+  justify-content: space-between;
+  border: 2px solid #bbb;
+  background: #eee;
+}
+
+.infopanel>*>button {
+  background: #eee;
+  text-decoration: underline;
+  color: #777;
+  border-color: transparent;
+}
+
+.infopanel>*>button.selected {
+  background: var(--color-selected);
+  color: #fff;
+}
+
+.infopanel>*>button:hover:not(.selected) {
+  background: var(--color-hover);
+  color: #000;
+}
+
+
+.filelist .info {
+  padding: 0;
+}
+
+.filter>* {
+  margin: 0;
+  border: 2px solid transparent;
+  padding: 0.5rem;
   background: #ddd;
 }
 
-.app>div.archive>.filter {
+.filter>div {
   background: #eee;
-  display: flex;
-  justify-content: space-between;
-  padding: 0rem;
+  color: #777;
+  width: fit-content;
+  xborder: 1px solid red;
 }
 
-.app>div.archive>.filter button {
-  max-width: 120px;
-  margin: 0.5rem;
-}
-
-input {
-  border: 2px solid transparent;
-  outline: 0;
-  padding: 1rem;
-  display: block;
-  background: #ee0;
-  background: transparent;
+.filter.info>div {
   flex: 1;
+
+}
+
+.filter.info>button {
+  background: #eee;
+  color: #777;
+  text-decoration: underline;
+}
+
+.filter.info>button.selected {
+  background: var(--color-selected);
+  color: #fff;
+  text-decoration: none;
+}
+
+.filter>input:not(:focus):hover {
+  background: var(--color-hover);
+}
+
+.filter.info>button:not(.selected):hover {
+  color: #000;
+  background: var(--color-hover);
+}
+
+.filter:not(.info)>button {
+  margin-left: 4px;
+}
+
+.filter:not(.info)>button:hover {
+  color: var(--color-hover);
+
+}
+
+.filter>div {
+  display: flex;
+}
+
+.filter button {
+  height: fit-content;
+  width: 150px;
+  width: fit-content;
+  background: #777;
+  color: #fff;
+  padding: 0.5rem 0.5rem;
+}
+
+.filter>input:focus {
+  cursor: text;
+  background: #fff;
+  border-color: transparent;
+  border-color: #bbb;
+}
+
+.filter>input:focus::placeholder {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.filter>input::placeholder {
+  opacity: 0;
+  transition: all 0.1s;
+  transform: translate(0, 20px);
+}
+
+.filter>input {
+  cursor: pointer;
+  border-color: #ddd;
+  outline: 0;
+  display: block;
+  background: #fff;
+  background: #eee;
+  height: fit-content;
+  flex: 1;
+  xdisplay: block;
+  xwidth: calc(100%);
+  margin: 0;
   min-width: 100px;
 }
 

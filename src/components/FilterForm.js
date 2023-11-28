@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 
-const FilterForm = ({ onChange }) => {
-    const [filter, setFilter] = useState("");
-    const [preFilter, setPreFilter] = useState("");
+const FilterForm = ({ filter, onChange, children }) => {
+    //const [filter, setFilter] = useState(value);
+    const [preFilter, setPreFilter] = useState(filter);
     const filterInputRef = useRef(null);
 
-    function handleFilter(e) {
-        setFilter(e.target.value);
+    useEffect(() => {
+        setPreFilter(filter);
+    }, [filter]);
+    function handleInput(e) {
+        setPreFilter(e.target.value);
     }
 
     function handleKeyDown(e) {
@@ -15,23 +18,37 @@ const FilterForm = ({ onChange }) => {
 
     function handleApply() {
         if (preFilter === filter) return;
-        setPreFilter(filter);
-        onChange(filter);
+        //setPreFilter(filter);
+        onChange(preFilter);
         filterInputRef.current.focus();
     }
 
     return (
         <div className='filter'>
+            <div>Filter</div>
             <input
-                value={filter}
+                value={preFilter}
                 ref={filterInputRef}
+                placeholder='no filter, try e.g. "apple banana !orange"'
+                onInput={handleInput}
                 type='text'
-                placeholder='filter keywords, e.g. "jpeg public"'
-                onInput={handleFilter}
                 onKeyDown={handleKeyDown}
             />
             {(filter !== preFilter) && (<button onClick={handleApply}>apply</button>)}
+            {(filter === preFilter) && (<div>{children}</div>)}
         </div>
+
+        // <div className='filter'>
+        //     <input
+        //         value={filter}
+        //         ref={filterInputRef}
+        //         type='text'
+        //         placeholder='filter keywords, e.g. "jpeg public"'
+        //         onInput={handleFilter}
+        //         onKeyDown={handleKeyDown}
+        //     />
+        //     {(filter !== preFilter) && (<button onClick={handleApply}>apply</button>)}
+        // </div>
     );
 };
 

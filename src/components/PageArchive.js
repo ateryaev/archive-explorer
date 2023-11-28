@@ -41,24 +41,20 @@ const PageArchive = ({ name, files }) => {
     function handleFilterApply(filter) {
         setFilter(filter);
         setSelectedIndex(-1);
+        setRenderSize(defaultRenderSize);
         fileListRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     return (<>
-
         <div className={(selectedIndex == -1 || !isBigPreview) ? 'page archive' : 'page archive hidden'}>
             <div className='title'>
                 <div>{name}</div>
                 <div></div>
             </div>
-            <FilterForm onChange={handleFilterApply} />
             <div className='filelist' ref={fileListRef} >
-
-                <div className='fileRow info'>
-                    <div>{filter == "" ? "No filters" : "Filter: " + filter}</div>
-                    <div>{helper.fileNumberString(filesInPath.length)}</div>
-                </div>
-
+                <FilterForm onChange={handleFilterApply} filter={filter}>
+                    {helper.fileNumberString(filesInPath.length)}
+                </FilterForm>
 
                 {filesInPath.slice(0, renderSize).map((file, index) => (
                     <div key={index} className={selectedIndex == index ? 'fileRow selected' : 'fileRow'}
@@ -70,13 +66,13 @@ const PageArchive = ({ name, files }) => {
                     </div>
                 ))}
                 {(renderSize < filesInPath.length) && (
-                    <div className='fileRow info'>
+                    <div className='filter info'>
                         <div>showing only first {renderSize} of {helper.fileNumberString(filesInPath.length)}, use filter</div>
-                        <div><a href="#" onClick={(e) => handleShowMore(e)}>show more</a></div>
+                        <button onClick={(e) => handleShowMore(e)}>show more</button>
                     </div>
                 )}
                 {(renderSize >= filesInPath.length && filesInPath.length > 1) && (
-                    <div className='fileRow info'>
+                    <div className='filter info'>
                         <div>all {helper.fileNumberString(filesInPath.length)} shown</div>
                         <div><a href="#"></a></div>
                     </div>

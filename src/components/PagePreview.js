@@ -3,21 +3,26 @@ import FilterForm from './FilterForm'
 import * as helper from '../utils/helpers'
 import { useState, useRef, useMemo, useEffect } from 'react';
 
-
-//setRenderSize
 const PagePreview = ({ file, onCloseClick, onExpandClick }) => {
   const [filter, setFilter] = useState("");
   const defaultRenderSize = 1024 * 50;
   const [renderSize, setRenderSize] = useState(defaultRenderSize);
-  const imageRef = useRef(null);
   const previewRef = useRef(null);
+  const [previewAs, setPreviewAs] = useState("txt");
+  const [linesFound, setLinesFound] = useState(0);
+  const [foundSize, setFoundSize] = useState(0);
+
 
 
   const renderHexSize = renderSize / 8;
 
   useEffect(() => {
     setRenderSize(defaultRenderSize);
+    setFilter("");
     previewRef.current.scrollTo({ top: 0 });
+    if (isImage) setPreviewAs("img");
+    else if (isText) setPreviewAs("txt");
+    else setPreviewAs("bin");
   }, [file]);
 
   const isText = useMemo(
@@ -69,9 +74,7 @@ const PagePreview = ({ file, onCloseClick, onExpandClick }) => {
       let str = "";
       let txt = "";
       const len = Math.min(renderHexSize, 16 * Math.ceil(file.bytes.byteLength / 16));
-
       for (let i = 0; i < len; i++) {
-
         const outOfBound = i >= file.bytes.byteLength;
         const byte = outOfBound ? 0 : file.bytes[i];
         if (i % 16 == 0) {
@@ -85,7 +88,6 @@ const PagePreview = ({ file, onCloseClick, onExpandClick }) => {
           str += "   ";
           txt += " ";
         }
-
         if (i % 16 == 15) {
           str += "| " + txt + "\n";
           txt = "";
@@ -112,65 +114,100 @@ const PagePreview = ({ file, onCloseClick, onExpandClick }) => {
     setRenderSize(renderSize + defaultRenderSize);
   }
 
+  function handlePreviewAs(e, format) {
+    e.preventDefault();
+    setPreviewAs(format);
+  }
+
+  const fileTextFiltered = useMemo(
+    () => {
+      const enc = new TextDecoder("utf-8");
+      const arr = file.bytes;//.slice(0, 1024*1024*10);//e.g. max 10Mb
+      const fullText = enc.decode(arr);
+      const lines = fullText.split("\n");
+      const f = filter.toUpperCase();
+      let fullTextFiltered = "";
+      let occurrence = 0;
+      let resLen = 0;
+      lines.map((line, index) => {
+        if (line.toUpperCase().indexOf(f) == -1) return;
+        resLen += line.length + 1;
+        if (resLen <= renderSize) {
+          line = line.slice(0, -(resLen - renderSize));
+          fullTextFiltered += ("00000000" + (index + 1)).slice(-8);
+          fullTextFiltered += " | ";
+          fullTextFiltered += line;
+          fullTextFiltered += "\n";
+        }
+        occurrence++;
+      });
+      setLinesFound(occurrence);
+      setFoundSize(resLen);
+
+      return fullTextFiltered;
+    },
+    [file, filter, renderSize]
+  );
+
+  function handleFilter(filter) {
+    setRenderSize(defaultRenderSize);
+    setFilter(filter);
+  }
   return (
     <div className='page archive preview'>
-      <div className='title'>
-        <div>{file.name}</div>
-        <div>
-          <button title='download file' onClick={handleDownload}>&nbsp;download&nbsp;</button>
-          <button title='expand view' onClick={onExpandClick}>&nbsp;&plusmn;&nbsp;</button>
-          <button title='close preview' onClick={onCloseClick}>&nbsp;&times;&nbsp;</button>
-        </div>
-      </div>
-      {(isText && false) && <FilterForm />}
+
 
       <div className='filelist' ref={previewRef}>
+        <div className='infopanel'>
+          <div className='main'>
+            <span className='main'>{helper.extractFileName(file.name)}</span>
+            <button onClick={handleDownload}>download</button>
+          </div>
+          <div>
+            <button onClick={(e) => handlePreviewAs(e, "txt")} className={previewAs === "txt" ? 'selected' : ''}>txt</button>
+            <button onClick={(e) => handlePreviewAs(e, "bin")} className={previewAs === "bin" ? 'selected' : ''}>bin</button>
+            <button onClick={(e) => handlePreviewAs(e, "img")} className={previewAs === "img" ? 'selected' : ''}>img</button>
+          </div>
+          <div>
+            <button onClick={(e) => onExpandClick(e)}>expand</button>
+          </div>
+        </div>
 
-        {isImage && (<div className='fileRow info'>
-          <div>Image format</div>
-          <div>{helper.sizeToBytesString(file.bytes.byteLength)}</div>
-        </div>)}
+        {(previewAs === "txt") && (
+          <FilterForm filter={filter} onChange={handleFilter} key={file.name}>
+            {linesFound} lines
+          </FilterForm>)}
 
-        {isImage && (<img src={fileUrl} />)}
+        {(previewAs === "img") && (<img src={fileUrl} />)}
+        {(previewAs === "txt") && <pre>{fileTextFiltered}</pre>}
+        {(previewAs === "bin") && <pre>{fileHex}</pre>}
 
-        {isText && (<div className='fileRow info'>
-          <div>Text format, {"no filters"}</div>
-          <div>{helper.sizeToBytesString(file.bytes.byteLength)}</div>
-        </div>)}
-
-        {isText && <pre>{fileText}</pre>}
-
-        {isText && (<div className='fileRow info'>
-          {(file.bytes.byteLength > renderSize) && (<div>
+        {(previewAs === "txt") && (<div className='filter info'>
+          {(foundSize > renderSize) && (<div>
             showing only first&nbsp;
             {helper.sizeToString(Math.min(renderSize, file.bytes.byteLength))}
-            &nbsp;of&nbsp;
-            {helper.sizeToString(file.bytes.byteLength)}
+            &nbsp;of filtered content&nbsp;
+            {helper.sizeToString(foundSize)}
           </div>)}
-          {(file.bytes.byteLength <= renderSize) && (<div>
-            all {helper.sizeToString(file.bytes.byteLength)} shown
+          {(foundSize <= renderSize) && (<div>
+            all {helper.sizeToString(foundSize)} of filtered content shown
           </div>)}
 
-          {(file.bytes.byteLength > renderSize) && <div><a href="#" onClick={(e) => handleShowMore(e)}>show more</a></div>}
+          {(foundSize > renderSize) && <button onClick={(e) => handleShowMore(e)}>show more</button>}
         </div>)}
 
+        {(previewAs === "bin") && (
+          <div className='infopanel'>
+            <div className='main'>
+              <span className='main'>showing only first&nbsp;
+                {helper.sizeToString(Math.min(renderHexSize, file.bytes.byteLength))}
+                &nbsp;of&nbsp;
+                {helper.sizeToString(file.bytes.byteLength)}</span>
 
-        {!isText && (<div className='fileRow info'>
-          <div>Binary data</div>
-          <div>{helper.sizeToBytesString(file.bytes.byteLength)}</div>
-        </div>)}
-
-        {!isText && (<pre>{fileHex}</pre>)}
-
-        {!isText && (<div className='fileRow info'>
-          <div>
-            showing only first&nbsp;
-            {helper.sizeToString(Math.min(renderHexSize, file.bytes.byteLength))}
-            &nbsp;of&nbsp;
-            {helper.sizeToString(file.bytes.byteLength)}
+              <button onClick={(e) => handleShowMore(e)}>show more</button>
+            </div>
           </div>
-          <div><a onClick={(e) => handleShowMore(e)}>show more</a></div>
-        </div>)}
+        )}
 
 
       </div>

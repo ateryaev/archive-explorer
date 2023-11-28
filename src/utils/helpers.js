@@ -12,22 +12,22 @@ export function sizeToString(filesize) {
   let unitCount = filesize;
   let unitIndex = 0;
 
-  while(unitCount > 1024) {
-      unitCount /= 1024;
-      unitIndex ++;
+  while (unitCount > 1024) {
+    unitCount /= 1024;
+    unitIndex++;
   }
   let decimals = 1;
 
   if (unitCount.toFixed(1).slice(-2) == ".0") decimals = 0;
-  
+
   return unitCount.toFixed(decimals) + unitNames[unitIndex];
 }
 
 export function sizeToBytesString(filesize) {
-  let sizeStr = filesize+"";
+  let sizeStr = filesize + "";
   let newStr = "";
 
-  while(sizeStr != "") {
+  while (sizeStr != "") {
     newStr = sizeStr.slice(-3) + "," + newStr;
     sizeStr = sizeStr.slice(0, -3);
   }
@@ -52,6 +52,7 @@ export function Download(blob, filename) {
 }
 
 export function extractFolder(fullFileName) {
+  if (fullFileName.lastIndexOf("/") < 0) return "";
   return fullFileName.slice(0, fullFileName.lastIndexOf("/"))
 }
 
