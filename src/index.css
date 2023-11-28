@@ -47,7 +47,8 @@ body {
   text-overflow: ellipsis;
   overflow: hidden;
   background: #000;
-  color: #afa;
+  border: 2px solid #000;
+  color: var(--color-hover);
 }
 
 .filelist {
@@ -95,16 +96,17 @@ body {
 }
 
 .dialog.drag {
-  background: #ffd;
+  background: var(--color-hover);
 }
 
 button {
   display: block;
+
   border: 2px solid #000;
   cursor: pointer;
   text-align: center;
   color: #000;
-  background: #fff;
+  xbackground: #fff;
   width: 100%;
   padding: 0.5rem;
 }
@@ -116,12 +118,12 @@ button {
 
 button:hover {
   color: #000;
-  background: #ffd;
+  background: var(--color-hover);
 }
 
 button:active {
-  color: #000;
-  background: #ffb;
+  color: #fff;
+  background: var(--color-selected);
 }
 
 
@@ -199,23 +201,23 @@ button:active {
 
 .infopanel {
   margin: 0.5rem;
-  xborder: 1px solid red;
   border-width: 2px;
-  xbackground: #eee;
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
   color: #000;
+  position: sticky;
+  left: 0.5rem;
 }
 
 .infopanel>div>span {
   display: inline-block;
   border: 2px solid transparent;
-  padding: 0.5rem;
+  padding: 0 0.5rem;
 }
 
 .infopanel button {
-  width: fit-content;
+  xwidth: fit-content;
 }
 
 .infopanel .main {
@@ -227,6 +229,14 @@ button:active {
   justify-content: space-between;
   border: 2px solid #bbb;
   background: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.infopanel>*>button svg {
+  width: 20px;
+  height: 20px;
 }
 
 .infopanel>*>button {
@@ -234,6 +244,17 @@ button:active {
   text-decoration: underline;
   color: #777;
   border-color: transparent;
+  height: 2.5rem;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 0.5rem;
+  fill: #777;
+}
+
+.infopanel>*>button:has(svg) {
+  width: 2.5rem;
 }
 
 .infopanel>*>button.selected {
@@ -244,6 +265,7 @@ button:active {
 .infopanel>*>button:hover:not(.selected) {
   background: var(--color-hover);
   color: #000;
+  fill: #000;
 }
 
 

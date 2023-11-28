@@ -74,7 +74,21 @@ const PageArchive = ({ name, files }) => {
                 {(renderSize >= filesInPath.length && filesInPath.length > 1) && (
                     <div className='filter info'>
                         <div>all {helper.fileNumberString(filesInPath.length)} shown</div>
-                        <div><a href="#"></a></div>
+                    </div>
+                )}
+                {(renderSize >= filesInPath.length && filesInPath.length == 1) && (
+                    <div className='filter info'>
+                        <div>only one file was found</div>
+                    </div>
+                )}
+                {(filter !== "" && filesInPath.length == 0) && (
+                    <div className='filter info'>
+                        <div>nothing was found</div>
+                    </div>
+                )}
+                {(filter === "" && filesInPath.length == 0) && (
+                    <div className='filter info'>
+                        <div>not an archive file, of format not supported</div>
                     </div>
                 )}
             </div>
@@ -82,7 +96,8 @@ const PageArchive = ({ name, files }) => {
 
         {(selectedIndex >= 0) && (<PagePreview file={filesInPath[selectedIndex]}
             onCloseClick={() => { setSelectedIndex(-1) }}
-            onExpandClick={() => { setBigPreview(!isBigPreview) }}></PagePreview>)}
+            onExpandClick={() => { setBigPreview(!isBigPreview) }}
+            fullScreen={isBigPreview}></PagePreview>)}
     </>
     );
 };

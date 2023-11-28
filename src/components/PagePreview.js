@@ -3,7 +3,7 @@ import FilterForm from './FilterForm'
 import * as helper from '../utils/helpers'
 import { useState, useRef, useMemo, useEffect } from 'react';
 
-const PagePreview = ({ file, onCloseClick, onExpandClick }) => {
+const PagePreview = ({ file, onCloseClick, onExpandClick, fullScreen }) => {
   const [filter, setFilter] = useState("");
   const defaultRenderSize = 1024 * 50;
   const [renderSize, setRenderSize] = useState(defaultRenderSize);
@@ -19,7 +19,7 @@ const PagePreview = ({ file, onCloseClick, onExpandClick }) => {
   useEffect(() => {
     setRenderSize(defaultRenderSize);
     setFilter("");
-    previewRef.current.scrollTo({ top: 0 });
+    previewRef.current.scrollTo({ top: 0, left: 0 });
     if (isImage) setPreviewAs("img");
     else if (isText) setPreviewAs("txt");
     else setPreviewAs("bin");
@@ -41,7 +41,7 @@ const PagePreview = ({ file, onCloseClick, onExpandClick }) => {
 
   const isImage = useMemo(
     () => {
-      const imageExts = " ico png jpg svg gif jpe bmp tiff jpeg"
+      const imageExts = " ico png jpg gif jpe bmp tiff jpeg"
       const ext = file.name.slice(file.name.lastIndexOf(".") + 1);
       return ext.length > 2 && imageExts.indexOf(" " + ext) >= 0;
     },
@@ -161,7 +161,10 @@ const PagePreview = ({ file, onCloseClick, onExpandClick }) => {
         <div className='infopanel'>
           <div className='main'>
             <span className='main'>{helper.extractFileName(file.name)}</span>
-            <button onClick={handleDownload}>download</button>
+          </div><div>
+            <button onClick={handleDownload}>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" /></svg>
+            </button>
           </div>
           <div>
             <button onClick={(e) => handlePreviewAs(e, "txt")} className={previewAs === "txt" ? 'selected' : ''}>txt</button>
@@ -169,7 +172,15 @@ const PagePreview = ({ file, onCloseClick, onExpandClick }) => {
             <button onClick={(e) => handlePreviewAs(e, "img")} className={previewAs === "img" ? 'selected' : ''}>img</button>
           </div>
           <div>
-            <button onClick={(e) => onExpandClick(e)}>expand</button>
+            <button onClick={(e) => onExpandClick(e)}>
+              {(!fullScreen) && <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-120 300-300l58-58 122 122 122-122 58 58-180 180ZM358-598l-58-58 180-180 180 180-58 58-122-122-122 122Z" /></svg>}
+              {(fullScreen) && <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m356-160-56-56 180-180 180 180-56 56-124-124-124 124Zm124-404L300-744l56-56 124 124 124-124 56 56-180 180Z" /></svg>}
+            </button>
+            {/* </div>
+          <div> */}
+            <button onClick={(e) => onCloseClick(e)}>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" /></svg>
+            </button>
           </div>
         </div>
 

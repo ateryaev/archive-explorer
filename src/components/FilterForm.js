@@ -37,18 +37,6 @@ const FilterForm = ({ filter, onChange, children }) => {
             {(filter !== preFilter) && (<button onClick={handleApply}>apply</button>)}
             {(filter === preFilter) && (<div>{children}</div>)}
         </div>
-
-        // <div className='filter'>
-        //     <input
-        //         value={filter}
-        //         ref={filterInputRef}
-        //         type='text'
-        //         placeholder='filter keywords, e.g. "jpeg public"'
-        //         onInput={handleFilter}
-        //         onKeyDown={handleKeyDown}
-        //     />
-        //     {(filter !== preFilter) && (<button onClick={handleApply}>apply</button>)}
-        // </div>
     );
 };
 
