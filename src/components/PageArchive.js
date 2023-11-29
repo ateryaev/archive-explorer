@@ -3,14 +3,15 @@ import FilterForm from './FilterForm'
 import PagePreview from './PagePreview';
 import { useState, useRef, useMemo } from 'react';
 import * as helper from '../utils/helpers'
+import FastPreview from './FastPreview';
+import ListFooter from './ListFooter';
 
-const PageArchive = ({ name, files }) => {
+const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
     const [filter, setFilter] = useState("");
     const defaultRenderSize = 500;
     const [renderSize, setRenderSize] = useState(defaultRenderSize);
     const fileListRef = useRef(null);
     const [selectedIndex, setSelectedIndex] = useState(-1);
-    const [isBigPreview, setBigPreview] = useState(false);
 
     function handleShowMore(e) {
         e.preventDefault();
@@ -18,13 +19,16 @@ const PageArchive = ({ name, files }) => {
     }
 
     function handleShowPreview(index, e) {
-        //console.log(e.target.scrollIntoView);
         setTimeout(() => {
             e.target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" })
         }, 0);
-        //scrollTo({ top: 0, behavior: 'smooth' });
-        setSelectedIndex(index);
+        if (index == selectedIndex) {
+            setSelectedIndex(-1);
+        } else {
+            setSelectedIndex(index);
+        }
     }
+
     const filesInPath = useMemo(
         () => {
             const filters = filter.toUpperCase().split(" ");
@@ -38,6 +42,28 @@ const PageArchive = ({ name, files }) => {
         [files, filter]
     );
 
+    function handleKeyDown(e) {
+        if (filesInPath.length == 0) return;
+        let newSelectedIndex = selectedIndex;
+        if (e.code === "ArrowUp") {
+            newSelectedIndex = selectedIndex - 1;
+        } else if (e.code === "ArrowDown") {
+            newSelectedIndex = selectedIndex + 1;
+        } else {
+            return;
+        }
+        e.preventDefault();
+        if (newSelectedIndex < 0) newSelectedIndex = filesInPath.length - 1;
+        if (newSelectedIndex > filesInPath.length - 1) newSelectedIndex = 0;
+        setSelectedIndex(newSelectedIndex);
+        setTimeout(async () => {
+            const selectedDiv = document.querySelector("div.selected");
+            if (!selectedDiv) return;
+            helper.log("ARCHIVE SCROLL", selectedDiv)
+            selectedDiv.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" })
+        }, 0);
+    }
+
     function handleFilterApply(filter) {
         setFilter(filter);
         setSelectedIndex(-1);
@@ -46,14 +72,15 @@ const PageArchive = ({ name, files }) => {
     }
 
     return (<>
-        <div className={(selectedIndex == -1 || !isBigPreview) ? 'page archive' : 'page archive hidden'}>
-            <div className='title'>
-                <div>{name}</div>
-                <div></div>
+        <div className='page'>
+            
+            <div className='title infopanel'>
+                <div><span>{name}</span></div>
             </div>
-            <div className='filelist' ref={fileListRef} >
+            <div className='filelist' ref={fileListRef} tabIndex={2}
+                onKeyDown={(e) => handleKeyDown(e)}>
                 <FilterForm onChange={handleFilterApply} filter={filter}>
-                    {helper.fileNumberString(filesInPath.length)}
+                    {filesInPath.length.toLocaleString()} files
                 </FilterForm>
 
                 {filesInPath.slice(0, renderSize).map((file, index) => (
@@ -65,7 +92,12 @@ const PageArchive = ({ name, files }) => {
                         <div>{helper.sizeToString(file.bytes.byteLength)}</div>
                     </div>
                 ))}
-                {(renderSize < filesInPath.length) && (
+                <ListFooter 
+                    current={Math.min(renderSize, filesInPath.length)} 
+                    total={filesInPath.length} unit={"file"}
+                    onMore={handleShowMore}/>
+                    
+                {/* {(renderSize < filesInPath.length) && (
                     <div className='filter info'>
                         <div>showing only first {renderSize} of {helper.fileNumberString(filesInPath.length)}, use filter</div>
                         <button onClick={(e) => handleShowMore(e)}>show more</button>
@@ -90,14 +122,15 @@ const PageArchive = ({ name, files }) => {
                     <div className='filter info'>
                         <div>not an archive file, of format not supported</div>
                     </div>
-                )}
+                )} */}
             </div>
         </div>
-
-        {(selectedIndex >= 0) && (<PagePreview file={filesInPath[selectedIndex]}
-            onCloseClick={() => { setSelectedIndex(-1) }}
-            onExpandClick={() => { setBigPreview(!isBigPreview) }}
-            fullScreen={isBigPreview}></PagePreview>)}
+        {(selectedIndex >= 0) && (
+            <FastPreview 
+                onDownload={()=>onDownload(filesInPath[selectedIndex])} 
+                onFullscreen={()=>onFullscreen(filesInPath[selectedIndex])} 
+                file={filesInPath[selectedIndex]} />
+        )}
     </>
     );
 };

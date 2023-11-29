@@ -4,15 +4,19 @@ import PageArchive from './components/PageArchive'
 import Credits from './components/Credits'
 import { useState } from 'react';
 import { unarchive, flatFiles, FileInfo } from './utils/unarchiver'
+import * as helper from './utils/helpers'
+import PagePreview from './components/PagePreview';
 
 function App() {
 
   const PAGE_START = "PAGE_START";
   const PAGE_LOADING = "PAGE_LOADING";
   const PAGE_ARCHIVE = "PAGE_ARCHIVE";
+  const PAGE_PREVIEW = "PAGE_PREVIEW";
 
   const [appState, setAppState] = useState(PAGE_START);
   const [files, setFiles] = useState([]);
+  const [previewFile, setPreviewFile] = useState(null);
   const [archiveName, setArchiveName] = useState("");
   const [loadingLog, setLoadingLog] = useState("");
 
@@ -40,13 +44,26 @@ function App() {
       setAppState(PAGE_START);
     }
   }
+  function handleDownload(file) {
+    console.log("handleDownload", file);
+    helper.Download(file.bytes, file.name);
+  }
+  function handleFullscreen(file) {
+    console.log("handleFullscreen");
+    setPreviewFile(file);
+    setAppState(PAGE_PREVIEW);
+  }
+  function handleBack() {
+    setAppState(PAGE_ARCHIVE);
+  }
 
   return (
     <div className="app">
       {appState === PAGE_START && (<PageStart onFileSelected={handleFileSelected} />)}
       {appState === PAGE_LOADING && (<PageLoading name={archiveName} log={loadingLog} />)}
-      {appState === PAGE_ARCHIVE && (<PageArchive name={archiveName} files={files} />)}
-      {appState !== PAGE_ARCHIVE && (<Credits />)}
+      {appState === PAGE_ARCHIVE && (<PageArchive key="archive" onDownload={handleDownload} onFullscreen={handleFullscreen} name={archiveName} files={files} />)}
+      {appState === PAGE_PREVIEW && (<PagePreview onBack={handleBack} file={previewFile} />)}
+      {appState !== PAGE_ARCHIVE && appState !== PAGE_PREVIEW && (<Credits />)}
     </div>)
 }
 

@@ -1,6 +1,7 @@
 :root {
   --color-hover: #def;
   --color-selected: #00f;
+  --color-darkest: #444;
 }
 
 * {
@@ -126,10 +127,8 @@ button:active {
   background: var(--color-selected);
 }
 
-
-.app>div.archive {
-  border: 2px solid #000;
-  border-top: 0px solid #000;
+.app>.page {
+  border: 2px solid var(--color-darkest);
   color: #fff;
   overflow-y: hidden;
   height: fit-content;
@@ -138,18 +137,7 @@ button:active {
   flex: 1;
 }
 
-.app>div.archive.preview {
-  flex: 1;
-}
-
-.app>div.archive.hidden {
-  flex: 0;
-}
-
-.app>div.archive {
-  flex: 1;
-}
-
+/* 
 .title {
   border: 0px solid transparent;
   border-top: 2px solid #000;
@@ -160,101 +148,105 @@ button:active {
   justify-content: space-between;
   padding: 1rem;
   gap: 1rem;
-  box-shadow: 0 0 0px 2px rgba(255, 255, 255, 0.75);
-  z-index: 2;
+}
+.title button {
+  width: fit-content;
+} */
+.main {
+  flex:1
 }
 
-.title>div:first-child {
+/* .title>div:first-child {
   overflow: hidden;
   overflow-wrap: break-word;
+} */
+.infopanel.title {
+  background: var(--color-darkest);
+  border-bottom: 2px solid transparent;
+  margin: 0;
+  padding: 0.5rem;
+}
+.infopanel.title span {
+  color: #fff;
+}
+.infopanel>div {
+  overflow: hidden;
+}
+.infopanel>div>span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+}
+.infopanel.title>* {
+  background: transparent;
+  border: 0;
+}
+.infopanel.title button {
+  background: rgba(255, 255, 255, 0.2);
+  outline: 0;
+  border: 0;
+  color: rgba(255, 255, 255, 0.75);
+  fill: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+}
+.infopanel.title button:focus {
+  box-shadow: inset 0 0 0 2px var(--color-hover);
+}
+.infopanel.title button.selected {
+  background: #fff;
+  color:#000;
 }
 
-.app>div.archive .filter {
-  display: flex;
-  justify-content: space-between;
-  align-content: center;
-  color: #000;
-  gap: 0.5rem;
-  gap: 0;
-  position: sticky;
-  left: 0.5rem;
-  xtop: 0.5rem;
-}
-
-.app>div.archive .filter:not(.info) {
-  top: 0.5rem;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.75)
-}
-
-.app>div.archive.preview .filter:not(.info) {
-  top: 0.5rem;
-  box-shadow: 0 0 0 2px rgba(221, 221, 221, 0.75);
-}
-
-.filelist .filter {
+.infopanel.filter2 {
   margin: 0.5rem;
   padding: 0.5rem;
-  border: 1px solid #bbb;
-  border-width: 2px;
+  border: 2px solid #bbb;
   background: #eee;
+  padding: 0.75rem 0;
 }
 
 .infopanel {
   margin: 0.5rem;
-  border-width: 2px;
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
-  color: #000;
+  color: #666;
   position: sticky;
   left: 0.5rem;
+  xpadding: 0 0.5rem;
 }
 
 .infopanel>div>span {
-  display: inline-block;
-  border: 2px solid transparent;
+  display: block;
+  line-height: 2.5rem;
   padding: 0 0.5rem;
 }
 
-.infopanel button {
-  xwidth: fit-content;
-}
-
-.infopanel .main {
-  flex: 1;
-}
-
-.infopanel>* {
+.infopanel>div {
   display: flex;
-  justify-content: space-between;
   border: 2px solid #bbb;
   background: #eee;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content:space-between;
 }
 
-.infopanel>*>button svg {
-  width: 20px;
-  height: 20px;
-}
-
-.infopanel>*>button {
-  background: #eee;
-  text-decoration: underline;
-  color: #777;
-  border-color: transparent;
+.infopanel>div>button {
+  line-height: 2.5rem;
   height: 2.5rem;
+  text-decoration: underline;
+  color: #666;
+  border: none;
   width: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 0.5rem;
-  fill: #777;
+  fill: #666; 
 }
 
 .infopanel>*>button:has(svg) {
-  width: 2.5rem;
+  aspect-ratio: 1/1;
 }
 
 .infopanel>*>button.selected {
@@ -267,45 +259,19 @@ button:active {
   color: #000;
   fill: #000;
 }
+/***********************/
 
-
-.filelist .info {
-  padding: 0;
-}
-
-.filter>* {
-  margin: 0;
-  border: 2px solid transparent;
-  padding: 0.5rem;
-  background: #ddd;
-}
-
-.filter>div {
+.filter2>div>button {
   background: #eee;
-  color: #777;
-  width: fit-content;
-  xborder: 1px solid red;
-}
-
-.filter.info>div {
-  flex: 1;
-
-}
-
-.filter.info>button {
-  background: #eee;
+  border: 2px solid #bbb;
   color: #777;
   text-decoration: underline;
+  margin-right: 0.5rem;
 }
 
-.filter.info>button.selected {
-  background: var(--color-selected);
-  color: #fff;
-  text-decoration: none;
-}
-
-.filter>input:not(:focus):hover {
+.filter2>input:not(:focus):hover {
   background: var(--color-hover);
+  border-color: #bbb;
 }
 
 .filter.info>button:not(.selected):hover {
@@ -317,55 +283,43 @@ button:active {
   margin-left: 4px;
 }
 
-.filter:not(.info)>button:hover {
-  color: var(--color-hover);
-
+.filter2>div {
+  border: none;
+  
 }
 
-.filter>div {
-  display: flex;
-}
-
-.filter button {
-  height: fit-content;
-  width: 150px;
-  width: fit-content;
-  background: #777;
-  color: #fff;
-  padding: 0.5rem 0.5rem;
-}
-
-.filter>input:focus {
+.filter2 input:focus {
   cursor: text;
   background: #fff;
   border-color: transparent;
   border-color: #bbb;
 }
 
-.filter>input:focus::placeholder {
+.filter2 input:focus::placeholder {
   opacity: 1;
   transform: translate(0, 0);
 }
 
-.filter>input::placeholder {
+.filter2 input::placeholder {
   opacity: 0;
   transition: all 0.1s;
   transform: translate(0, 20px);
 }
 
-.filter>input {
+.filter2 input {
+  line-height: 2.5rem;
   cursor: pointer;
   border-color: #ddd;
+  border: 2px solid #ddd;
+  padding: 0 0.5rem;
   outline: 0;
   display: block;
-  background: #fff;
   background: #eee;
   height: fit-content;
   flex: 1;
-  xdisplay: block;
-  xwidth: calc(100%);
   margin: 0;
-  min-width: 100px;
+  margin: -2px;
+  min-width: 50px;
 }
 
 @keyframes blink {
@@ -424,4 +378,79 @@ img {
   background: #fff;
   padding: 1rem;
   margin: 1rem;
+}
+
+.fastpreview {
+  flex: 0.5;
+  display: block;
+  background: #ddd;
+  overflow: scroll;
+  border: 2px solid var(--color-darkest);
+  border-top:0;
+  padding: 0.5rem;
+}
+.fastpreview button {
+  width: fit-content;
+  xmargin-top: -0.5rem;
+  xright: 0;
+  z-index: 1;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  xborder-radius: 25%;
+  fill: #bbb;
+  background: #fff;
+  border: 2px solid #bbb;
+  display: flex;
+  justify-content: space-around;
+  align-content:baseline;
+}
+.fastpreview button svg {
+  margin: auto;
+  display: block;
+}
+.fastpreview button:hover {
+  background-color: var(--color-hover);
+  fill: #777;
+  border-color: #777;
+}
+.fastpreview button:focus {
+  outline: 0;
+  box-shadow: inset 0 0 0 2px var(--color-hover);
+}
+.fastpreview>div>* {
+  display: block;
+}
+.fastpreview>div>span {
+  flex: 1;
+  xborder: 1px solid red;
+  overflow: hidden;
+  margin: auto;
+}
+.fastpreview>div {
+  gap:0.5rem;
+  xborder: 1px solid red;
+  display: flex;
+  justify-content: space-around;
+  align-content:baseline;
+  padding: 0 0.5rem !important;
+}
+
+.fastpreview div {
+  padding: 0.5rem;
+  color:#777;
+  left: 0rem;
+  position: sticky;
+}
+.fastpreview pre {
+  color: #000;
+  padding: 0.5rem;
+  overflow:visible;
+  xborder: 1px solid red;
+}
+
+div:focus {
+  box-shadow: inset 0 0 0 2px var(--color-hover);
+  outline: 0;
 }
