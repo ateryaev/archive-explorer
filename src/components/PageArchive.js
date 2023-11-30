@@ -39,11 +39,24 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
 
     function handleKeyDown(e) {
         if (filesInPath.length == 0) return;
+        //console.log(e.code)
         let newSelectedIndex = selectedIndex;
         if (e.code === "ArrowUp") {
             newSelectedIndex = selectedIndex - 1;
+            if (newSelectedIndex < 0) {
+                fileListRef.current.scrollTop = 0;
+                newSelectedIndex = 0;
+            }
         } else if (e.code === "ArrowDown") {
             newSelectedIndex = selectedIndex + 1;
+            if (newSelectedIndex > filesInPath.length - 1) {
+                fileListRef.current.scrollTop = fileListRef.current.scrollHeight;
+                newSelectedIndex = filesInPath.length - 1;
+            }
+        } else if (e.code === "Escape") {
+            setSelectedIndex(-1);
+            e.preventDefault();
+            return;
         } else {
             return;
         }
@@ -54,7 +67,6 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         setTimeout(async () => {
             const selectedDiv = document.querySelector("div.selected");
             if (!selectedDiv) return;
-            helper.log("ARCHIVE SCROLL", selectedDiv)
             selectedDiv.scrollIntoView({ behavior: "instant", block: "nearest", inline: "nearest" })
         }, 0);
     }
@@ -66,14 +78,19 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         fileListRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    function handleTitleClick(e) {
+        e.preventDefault();
+        fileListRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     return (<>
         <div className='page archive'>
 
             <div className='title infopanel'>
-                <div><span>{name}</span></div>
+                <div onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}><span>{name}</span></div>
             </div>
             <div className='filelist' ref={fileListRef} tabIndex={2}
-                onKeyDown={(e) => handleKeyDown(e)}>
+                onKeyDown={handleKeyDown}>
                 <FilterForm onChange={handleFilterApply} filter={filter}>
                     {filesInPath.length.toLocaleString()} files
                 </FilterForm>

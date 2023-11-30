@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Fragment } from 'react';
 
 const PageLoading = ({ name, log }) => {
   const logsRef = useRef(null);
-  const [logs, setLogs] = useState(["line1", "line2", "line2", "line2", "line2", "line2", "line2", "line2", "linelast"]);
+  const [logs, setLogs] = useState([]);
   const [spinner, setSpinner] = useState("...");
 
   useEffect(() => {
@@ -18,13 +18,13 @@ const PageLoading = ({ name, log }) => {
   }, []);
 
   useEffect(() => {
-    let newLogs = logs.slice(0);
+    let newLogs = logs.slice(-10);
     newLogs.push(log);
     setLogs(newLogs);
-    let to = setTimeout(() => { logsRef.current.scrollTo({ top: logsRef.current.scrollHeight, behavior: 'smooth' }); }, 0);
-    return () => {
-      clearTimeout(to);
-    };
+    logsRef.current.scrollTop = 100000;
+    setTimeout(() => {
+      logsRef.current.scrollTop = 100000;
+    }, 0);
   }, [log]);
 
   return (
@@ -34,7 +34,7 @@ const PageLoading = ({ name, log }) => {
       <div></div>
       <pre className='logs' ref={logsRef}>
         {logs.map((line, index) => (
-          <>{index == logs.length - 1 ? "-" : "+"} {line + "\n"}</>
+          <Fragment key={index}>{index == logs.length - 1 ? "-" : "+"} {line + "\n"}</Fragment>
         ))}
       </pre>
     </div>

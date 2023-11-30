@@ -1,6 +1,6 @@
 :root {
   --color-hover: #def;
-  --color-selected: #00f;
+  --color-selected: blue;
   --color-darkest: #444;
 }
 
@@ -14,7 +14,6 @@
 
 body {
   background: #ccc;
-
 }
 
 .app {
@@ -110,9 +109,12 @@ button {
   padding: 0.5rem;
   display: block;
   color: #fff;
-  fill:#fff;
+  fill: #fff;
   background: var(--color-selected);
   outline: 0;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 button:focus {
@@ -171,7 +173,7 @@ button:active {
   color: rgba(255, 255, 255, 0.75);
   fill: rgba(255, 255, 255, 0.75);
   text-decoration: none;
-  
+
 }
 
 .infopanel.title button:focus {
@@ -273,7 +275,6 @@ button:active {
 
 .filter2>div.inputButton:has(*:focus) {
   background: #fff;
-  border-color: transparent;
   border-color: #bbb;
 }
 
@@ -308,7 +309,7 @@ button:active {
   height: fit-content;
   flex: 1;
   margin: 0;
-  color: #777;
+  color: #000;
   min-width: 50px;
 }
 

@@ -54,10 +54,13 @@ const PageStart = ({ onFileSelected }) => {
       onDragLeave={handleDragLeave}>
       <div>
         <input type='file' id={id} onChange={handleFile} style={{ display: "none" }} />
-        Drop archive file here.<br />
-        Supported formats: *.zip, *.gz, *.xz, *.tar.<br />
-        File will be processed localy.<br />
-        200M archive can take 1 minute to process.<br /><br />
+        Drop archive file here.<br/>
+        Supported formats: *.zip, *.gz, *.xz, *.tar.<br/>
+        File will be processed localy.
+        
+      </div>
+      <div style={{opacity:0.75}}>
+        200M archive with 10,000 files and subarchives inside can take around one minute to process.<br /><br />
       </div>
       <button onClick={handleClick}>open file</button>
     </div>

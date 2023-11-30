@@ -88,7 +88,7 @@ const PagePreview = ({ file, onBack, onDownload }) => {
       let resLen = 0;
       let resPreviewLen = 0;
       lines.map((line, index) => {
-        
+
         if (!helper.isTextMatchFilters(line, filters)) return;
 
         resLen += line.length + 1;
@@ -116,6 +116,12 @@ const PagePreview = ({ file, onBack, onDownload }) => {
     setRenderSize(defaultRenderSize);
     setFilter(filter);
   }
+
+  function handleTitleClick(e) {
+    e.preventDefault();
+    previewRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   return (
     <div className='page'>
       <div className='infopanel title'>
@@ -124,7 +130,7 @@ const PagePreview = ({ file, onBack, onDownload }) => {
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M360-240 120-480l240-240 56 56-144 144h568v80H272l144 144-56 56Z" /></svg>
           </button>
         </div>
-        <div className='main'><span>{file.name}</span></div>
+        <div className='main' onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}><span>{file.name}</span></div>
         <div>
           <button onClick={(e) => handlePreviewAs(e, "txt")} className={previewAs === "txt" ? 'selected' : ''}>txt</button>
           <button onClick={(e) => handlePreviewAs(e, "bin")} className={previewAs === "bin" ? 'selected' : ''}>bin</button>
