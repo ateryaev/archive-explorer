@@ -1,6 +1,4 @@
-import ArchiveTitle from './ArchiveTitle'
 import FilterForm from './FilterForm'
-import PagePreview from './PagePreview';
 import { useState, useRef, useMemo } from 'react';
 import * as helper from '../utils/helpers'
 import FastPreview from './FastPreview';
@@ -20,7 +18,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
 
     function handleShowPreview(index, e) {
         setTimeout(() => {
-            e.target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" })
+            e.target.scrollIntoView({ behavior: "instant", block: "nearest", inline: "nearest" })
         }, 0);
         if (index == selectedIndex) {
             setSelectedIndex(-1);
@@ -57,7 +55,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
             const selectedDiv = document.querySelector("div.selected");
             if (!selectedDiv) return;
             helper.log("ARCHIVE SCROLL", selectedDiv)
-            selectedDiv.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" })
+            selectedDiv.scrollIntoView({ behavior: "instant", block: "nearest", inline: "nearest" })
         }, 0);
     }
 

@@ -1,4 +1,3 @@
-import ArchiveTitle from './ArchiveTitle'
 import FilterForm from './FilterForm'
 import * as helper from '../utils/helpers'
 import { useState, useRef, useMemo, useEffect } from 'react';

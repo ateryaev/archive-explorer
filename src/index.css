@@ -34,22 +34,26 @@ body {
   margin: auto;
   padding: 1rem;
   align-items: center;
-  border: 2px solid #000;
+  border: 2px solid var(--color-darkest);
   width: 90%;
   max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .dialog>div {
   padding: 0.5rem;
 }
 
-.dialog>div.logs {
-  white-space: nowrap;
+.dialog>.logs {
+  xwhite-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  background: #000;
-  border: 2px solid #000;
+  background: var(--color-darkest);
   color: var(--color-hover);
+  max-height: 100px;
+  height: 100px;
 }
 
 .filelist {
@@ -101,30 +105,28 @@ body {
 }
 
 button {
-  display: block;
-
-  border: 2px solid #000;
   cursor: pointer;
-  text-align: center;
-  color: #000;
-  xbackground: #fff;
-  width: 100%;
+  border: 0;
   padding: 0.5rem;
+  display: block;
+  color: #fff;
+  fill:#fff;
+  background: var(--color-selected);
+  outline: 0;
 }
 
-.dialog button {
-  color: #fff;
-  background: #000;
+button:focus {
+  box-shadow: inset 0 0 0 2px var(--color-hover);
 }
 
 button:hover {
-  color: #000;
   background: var(--color-hover);
+  color: var(--color-darkest);
+  fill: var(--color-darkest);
 }
 
 button:active {
-  color: #fff;
-  background: var(--color-selected);
+  box-shadow: inset 0 0 0 2px var(--color-selected);
 }
 
 .app>.page {
@@ -135,53 +137,33 @@ button:active {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-width: 250px;
 }
 
-/* 
-.title {
-  border: 0px solid transparent;
-  border-top: 2px solid #000;
-  border-bottom: 2px solid #000;
-  background: #777;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem;
-  gap: 1rem;
-}
-.title button {
-  width: fit-content;
-} */
 .main {
-  flex:1
+  flex: 1
 }
 
-/* .title>div:first-child {
-  overflow: hidden;
-  overflow-wrap: break-word;
-} */
 .infopanel.title {
   background: var(--color-darkest);
   border-bottom: 2px solid transparent;
   margin: 0;
   padding: 0.5rem;
 }
+
 .infopanel.title span {
   color: #fff;
 }
+
 .infopanel>div {
   overflow: hidden;
 }
-.infopanel>div>span {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 
-}
 .infopanel.title>* {
   background: transparent;
   border: 0;
 }
+
 .infopanel.title button {
   background: rgba(255, 255, 255, 0.2);
   outline: 0;
@@ -189,13 +171,16 @@ button:active {
   color: rgba(255, 255, 255, 0.75);
   fill: rgba(255, 255, 255, 0.75);
   text-decoration: none;
+  
 }
+
 .infopanel.title button:focus {
   box-shadow: inset 0 0 0 2px var(--color-hover);
 }
+
 .infopanel.title button.selected {
   background: #fff;
-  color:#000;
+  color: #000;
 }
 
 .infopanel.filter2 {
@@ -203,7 +188,7 @@ button:active {
   padding: 0.5rem;
   border: 2px solid #bbb;
   background: #eee;
-  padding: 0.75rem 0;
+  padding: 0.5rem 0;
 }
 
 .infopanel {
@@ -221,6 +206,9 @@ button:active {
   display: block;
   line-height: 2.5rem;
   padding: 0 0.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .infopanel>div {
@@ -228,21 +216,19 @@ button:active {
   border: 2px solid #bbb;
   background: #eee;
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
 }
 
 .infopanel>div>button {
+  background: transparent;
+  color: var(--color-selected);
   line-height: 2.5rem;
   height: 2.5rem;
-  text-decoration: underline;
-  color: #666;
   border: none;
-  width: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 0.5rem;
-  fill: #666; 
 }
 
 .infopanel>*>button:has(svg) {
@@ -256,17 +242,19 @@ button:active {
 
 .infopanel>*>button:hover:not(.selected) {
   background: var(--color-hover);
-  color: #000;
-  fill: #000;
+  color: var(--color-darkest);
+  fill: var(--color-darkest);
 }
+
 /***********************/
 
 .filter2>div>button {
-  background: #eee;
-  border: 2px solid #bbb;
-  color: #777;
-  text-decoration: underline;
-  margin-right: 0.5rem;
+  border: 0px solid #ddd;
+  color: #fff;
+  text-decoration: none;
+  background: var(--color-selected);
+  height: 2rem;
+  margin: 4px;
 }
 
 .filter2>input:not(:focus):hover {
@@ -274,22 +262,16 @@ button:active {
   border-color: #bbb;
 }
 
-.filter.info>button:not(.selected):hover {
-  color: #000;
-  background: var(--color-hover);
-}
-
-.filter:not(.info)>button {
-  margin-left: 4px;
-}
-
 .filter2>div {
   border: none;
-  
+  align-items: center;
 }
 
 .filter2 input:focus {
   cursor: text;
+}
+
+.filter2>div.inputButton:has(*:focus) {
   background: #fff;
   border-color: transparent;
   border-color: #bbb;
@@ -306,61 +288,39 @@ button:active {
   transform: translate(0, 20px);
 }
 
-.filter2 input {
-  line-height: 2.5rem;
-  cursor: pointer;
-  border-color: #ddd;
+.filter2>div.inputButton {
+  flex: 1;
+  background: #eee;
   border: 2px solid #ddd;
+}
+
+.filter2>div>input {
+  cursor: pointer;
+  display: block;
+  flex: 1;
+  line-height: 2.5rem;
+  border-color: #ddd;
+  border: none;
   padding: 0 0.5rem;
   outline: 0;
   display: block;
-  background: #eee;
+  background: transparent;
   height: fit-content;
   flex: 1;
   margin: 0;
-  margin: -2px;
+  color: #777;
   min-width: 50px;
-}
-
-@keyframes blink {
-  0% {
-    color: #eee;
-  }
-
-  67% {
-    color: #eee;
-  }
-
-  68% {
-    color: #000;
-  }
-
-  100% {
-    color: #000;
-  }
-}
-
-.dialog b {
-  animation: blink 1s infinite;
-}
-
-.dialog b:nth-child(2) {
-  animation-delay: 0.33s;
-}
-
-.dialog b:nth-child(3) {
-  animation-delay: 0.66s;
 }
 
 .credits,
 .credits * {
   text-align: center;
-  color: #777;
+  color: var(--color-darkest);
   font-size: 11px;
 }
 
 .credits a:hover {
-  color: #000;
+  color: var(--color-selected);
 }
 
 pre {
@@ -379,6 +339,7 @@ img {
   padding: 1rem;
   margin: 1rem;
 }
+
 .preview {
   background: #ddd;
   overflow-y: scroll;
@@ -391,9 +352,10 @@ img {
   background: #ddd;
   overflow: scroll;
   border: 2px solid var(--color-darkest);
-  border-top:0;
+  border-top: 0;
   padding: 0.5rem;
 }
+
 .fastpreview button {
   width: fit-content;
   xmargin-top: -0.5rem;
@@ -409,49 +371,56 @@ img {
   border: 2px solid #bbb;
   display: flex;
   justify-content: space-around;
-  align-content:baseline;
+  align-content: baseline;
 }
+
 .fastpreview button svg {
   margin: auto;
   display: block;
 }
+
 .fastpreview button:hover {
   background-color: var(--color-hover);
   fill: #777;
   border-color: #777;
 }
+
 .fastpreview button:focus {
   outline: 0;
   box-shadow: inset 0 0 0 2px var(--color-hover);
 }
+
 .fastpreview>div>* {
   display: block;
 }
+
 .fastpreview>div>span {
   flex: 1;
-  xborder: 1px solid red;
   overflow: hidden;
   margin: auto;
+  white-space: nowrap;
 }
+
 .fastpreview>div {
-  gap:0.5rem;
+  gap: 0.5rem;
   xborder: 1px solid red;
   display: flex;
   justify-content: space-around;
-  align-content:baseline;
+  align-content: baseline;
   padding: 0 0.5rem !important;
 }
 
 .fastpreview div {
   padding: 0.5rem;
-  color:#777;
+  color: #777;
   left: 0rem;
   position: sticky;
 }
+
 .fastpreview pre {
   color: #000;
   padding: 0.5rem;
-  overflow:visible;
+  overflow: visible;
   xborder: 1px solid red;
 }
 
@@ -465,6 +434,7 @@ div:focus {
 .PAGE_PREVIEW .fastpreview {
   display: none;
 }
+
 .PAGE_PREVIEW .archive {
   display: none;
 }

@@ -1,4 +1,4 @@
-const ListFooter = ({current, total, unit, onMore}) => {
+const ListFooter = ({ current, total, unit, onMore }) => {
   let status = "";
   if (current < total) {
     status = "showing first " + current.toLocaleString() + " of " + total.toLocaleString() + " " + unit + "s";
@@ -11,11 +11,11 @@ const ListFooter = ({current, total, unit, onMore}) => {
   }
   return (
     <div className='infopanel'>
-        <div className='main'>
-          <span className='main'>{status}&nbsp;</span>
-          {current != total && <button onClick={(e) => onMore(e)}>show more</button>}  
-        </div>
+      <div className='main'>
+        <span className='main'>{status}&nbsp;</span>
+        {current != total && <button tabIndex="-1" onClick={onMore}>show more</button>}
       </div>
+    </div>
   );
 };
 

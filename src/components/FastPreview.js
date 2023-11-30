@@ -1,7 +1,5 @@
-import ArchiveTitle from './ArchiveTitle'
-import FilterForm from './FilterForm'
 import * as helper from '../utils/helpers'
-import { useState, useRef, useMemo, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 let scrollTransaction = 0;
 
@@ -16,7 +14,7 @@ const FastPreview = ({ file, onDownload, onFullscreen }) => {
   const renderSize = Math.min(file.bytes.byteLength, maxSize);
   const scrollDivRef = useRef(null);
   const scrollNameRef = useRef(null);
-  
+
   useEffect(() => {
     const fileFormat = helper.testIfText(file.bytes) ? "txt" : "bin";
     setFormat(fileFormat);

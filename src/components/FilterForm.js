@@ -18,27 +18,29 @@ const FilterForm = ({ filter, onChange, children }) => {
 
     function handleApply() {
         if (preFilter === filter) return;
-        //setPreFilter(filter);
         onChange(preFilter);
-        //filterInputRef.current.focus();
     }
 
     return (
         <div className='infopanel filter2'>
             <div><span>Filter</span></div>
-            <input
-            className='main'
-                tabIndex={1}
-                value={preFilter}
-                ref={filterInputRef}
-                placeholder='no filter, try e.g. "apple banana !orange"'
-                onInput={handleInput}
-                type='text'
-                onKeyDown={handleKeyDown}
-            />
+            <div className='inputButton'>
+                <input
+                    className='main'
+                    tabIndex={1}
+                    value={preFilter}
+                    ref={filterInputRef}
+                    placeholder='no filter, try e.g. "apple banana !orange"'
+                    onInput={handleInput}
+                    type='text'
+                    onKeyDown={handleKeyDown}
+                />
+                {(filter !== preFilter) && (
+                    <button tabIndex={1} onClick={handleApply}>apply</button>
+                )}
+            </div>
             <div>
-            {(filter !== preFilter) && (<button onClick={handleApply}>apply</button>)}
-            {(filter === preFilter) && (<span>{children}</span>)}
+                <span>{children}</span>
             </div>
         </div>
     );
