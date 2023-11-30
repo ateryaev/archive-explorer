@@ -33,10 +33,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         () => {
             const filters = filter.toUpperCase().split(" ");
             return files.filter((file) => {
-                for (const f of filters) {
-                    if (file.name.toUpperCase().indexOf(f) == -1) return false;
-                }
-                return true
+                return helper.isTextMatchFilters(file.name, filters);
             });
         },
         [files, filter]
@@ -72,8 +69,8 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
     }
 
     return (<>
-        <div className='page'>
-            
+        <div className='page archive'>
+
             <div className='title infopanel'>
                 <div><span>{name}</span></div>
             </div>
@@ -92,43 +89,16 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
                         <div>{helper.sizeToString(file.bytes.byteLength)}</div>
                     </div>
                 ))}
-                <ListFooter 
-                    current={Math.min(renderSize, filesInPath.length)} 
+                <ListFooter
+                    current={Math.min(renderSize, filesInPath.length)}
                     total={filesInPath.length} unit={"file"}
-                    onMore={handleShowMore}/>
-                    
-                {/* {(renderSize < filesInPath.length) && (
-                    <div className='filter info'>
-                        <div>showing only first {renderSize} of {helper.fileNumberString(filesInPath.length)}, use filter</div>
-                        <button onClick={(e) => handleShowMore(e)}>show more</button>
-                    </div>
-                )}
-                {(renderSize >= filesInPath.length && filesInPath.length > 1) && (
-                    <div className='filter info'>
-                        <div>all {helper.fileNumberString(filesInPath.length)} shown</div>
-                    </div>
-                )}
-                {(renderSize >= filesInPath.length && filesInPath.length == 1) && (
-                    <div className='filter info'>
-                        <div>only one file was found</div>
-                    </div>
-                )}
-                {(filter !== "" && filesInPath.length == 0) && (
-                    <div className='filter info'>
-                        <div>nothing was found</div>
-                    </div>
-                )}
-                {(filter === "" && filesInPath.length == 0) && (
-                    <div className='filter info'>
-                        <div>not an archive file, of format not supported</div>
-                    </div>
-                )} */}
+                    onMore={handleShowMore} />
             </div>
         </div>
         {(selectedIndex >= 0) && (
-            <FastPreview 
-                onDownload={()=>onDownload(filesInPath[selectedIndex])} 
-                onFullscreen={()=>onFullscreen(filesInPath[selectedIndex])} 
+            <FastPreview
+                onDownload={() => onDownload(filesInPath[selectedIndex])}
+                onFullscreen={() => onFullscreen(filesInPath[selectedIndex])}
                 file={filesInPath[selectedIndex]} />
         )}
     </>

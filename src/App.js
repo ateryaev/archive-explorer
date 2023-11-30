@@ -58,11 +58,11 @@ function App() {
   }
 
   return (
-    <div className="app">
+    <div className={"app "+ appState}>
       {appState === PAGE_START && (<PageStart onFileSelected={handleFileSelected} />)}
       {appState === PAGE_LOADING && (<PageLoading name={archiveName} log={loadingLog} />)}
-      {appState === PAGE_ARCHIVE && (<PageArchive key="archive" onDownload={handleDownload} onFullscreen={handleFullscreen} name={archiveName} files={files} />)}
-      {appState === PAGE_PREVIEW && (<PagePreview onBack={handleBack} file={previewFile} />)}
+      {(appState === PAGE_ARCHIVE || appState === PAGE_PREVIEW) && (<PageArchive onDownload={handleDownload} onFullscreen={handleFullscreen} name={archiveName} files={files} />)}
+      {appState === PAGE_PREVIEW && (<PagePreview onBack={handleBack} onDownload={handleDownload} file={previewFile} />)}
       {appState !== PAGE_ARCHIVE && appState !== PAGE_PREVIEW && (<Credits />)}
     </div>)
 }

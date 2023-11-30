@@ -3,10 +3,6 @@ import untar from "js-untar";
 const JSZip = require("jszip");
 const pako = require('pako');
 
-// function sleep(ms) {
-//     return new Promise(resolve => setTimeout(resolve, ms))
-// }
-
 export function FileInfo(name, bytes) {
     return {
         name,

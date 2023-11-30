@@ -379,6 +379,11 @@ img {
   padding: 1rem;
   margin: 1rem;
 }
+.preview {
+  background: #ddd;
+  overflow-y: scroll;
+  flex: 1;
+}
 
 .fastpreview {
   flex: 0.5;
@@ -453,4 +458,13 @@ img {
 div:focus {
   box-shadow: inset 0 0 0 2px var(--color-hover);
   outline: 0;
+}
+
+/* to keep file list same state while previewing */
+
+.PAGE_PREVIEW .fastpreview {
+  display: none;
+}
+.PAGE_PREVIEW .archive {
+  display: none;
 }

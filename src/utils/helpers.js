@@ -1,6 +1,6 @@
 
 export function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 export function log(msg) {
@@ -45,12 +45,6 @@ export function sizeToBytesString(filesize) {
   return newStr.slice(0, -1) + " bytes";
 }
 
-// export function fileNumberString(count) {
-//   if (count == 0) return "no files";
-//   if (count == 1) return "1 file";
-//   return count + " files";
-// }
-
 export function Download(bytes, filename) {
   const fullName = filename;
   const downloadName = fullName.slice(fullName.lastIndexOf("/") + 1);
@@ -59,7 +53,7 @@ export function Download(bytes, filename) {
   const downloadUrl = URL.createObjectURL(blob, downloadName);
   const a = document.createElement('a');
   a.href = downloadUrl;
-  a.download = filename;
+  a.download = downloadName;
   document.body.appendChild(a);
   a.click();
   URL.revokeObjectURL(downloadUrl);
@@ -83,34 +77,54 @@ export function testIfText(bytes) {
   const binRatio = (numOfBins + 1) / (checkSize + 1);
   return binRatio < 0.05;
 }
+export function testIfImage(filename) {
+  const imageExts = " ico png jpg gif jpe bmp tiff jpeg";
+  const ext = filename.slice(filename.lastIndexOf(".") + 1);
+  return ext.length > 2 && imageExts.indexOf(" " + ext) >= 0;
+}
+
 export function toTxtPreview(bytes, size) {
   const enc = new TextDecoder("utf-8");
   const arr = bytes.slice(0, size);
   return enc.decode(arr);
 }
 export function toHexPreview(bytes, size) {
-    let str = "";
-    let txt = "";
-    const len = Math.min(size, 16 * Math.ceil(bytes.byteLength / 16));
-    for (let i = 0; i < len; i++) {
-      const outOfBound = i >= bytes.byteLength;
-      const byte = outOfBound ? 0 : bytes[i];
-      if (i % 16 == 0) {
-        str += ("00000000" + i.toString(16)).slice(-8) + " | ";
-      }
-      if (i % 16 == 8) str += " ";
-      if (!outOfBound) {
-        str += ("00" + byte.toString(16)).slice(-2) + " ";
-        txt += isSymbolChar(byte) ? String.fromCharCode(byte) : ".";
-      } else {
-        str += "   ";
-        txt += " ";
-      }
-      if (i % 16 == 15) {
-        str += "| " + txt + "\n";
-        txt = "";
-      }
+  let str = "";
+  let txt = "";
+  const len = Math.min(size, 16 * Math.ceil(bytes.byteLength / 16));
+  for (let i = 0; i < len; i++) {
+    const outOfBound = i >= bytes.byteLength;
+    const byte = outOfBound ? 0 : bytes[i];
+    if (i % 16 == 0) {
+      str += ("00000000" + i.toString(16)).slice(-8) + " | ";
     }
-    return str;
+    if (i % 16 == 8) str += " ";
+    if (!outOfBound) {
+      str += ("00" + byte.toString(16)).slice(-2) + " ";
+      txt += isSymbolChar(byte) ? String.fromCharCode(byte) : ".";
+    } else {
+      str += "   ";
+      txt += " ";
+    }
+    if (i % 16 == 15) {
+      str += "| " + txt + "\n";
+      txt = "";
+    }
+  }
+  return str;
 }
+
+export function isTextMatchFilters(text, filters) {
+  for (const f of filters) {
+    if (f.length < 1) continue;
+    if (f.length > 1 && f[0] === "!") {
+      const notF = f.slice(1);
+      if (text.toUpperCase().indexOf(notF) != -1) return false;
+    } else {
+      if (text.toUpperCase().indexOf(f) == -1) return false;
+    }    
+  }
+  return true;
+}
+
 export default isSymbolChar;
