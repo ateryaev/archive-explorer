@@ -8,10 +8,10 @@ const PageLoading = ({ name, log }) => {
   useEffect(() => {
     let counter = 0;
     let ti = setInterval(() => {
-      const chars = ["|...", ".|..", "..|.", "...|"];
+      const chars = ["|....", ".|...", "..|..", "...|.", "....|"];
       counter = (counter + 1) % chars.length;
       setSpinner("[" + chars[counter] + "]");
-    }, 200);
+    }, 150);
     return () => {
       clearInterval(ti);
     }
@@ -21,17 +21,17 @@ const PageLoading = ({ name, log }) => {
     let newLogs = logs.slice(-10);
     newLogs.push(log);
     setLogs(newLogs);
-    logsRef.current.scrollTop = 100000;
-    setTimeout(() => {
-      logsRef.current.scrollTop = 100000;
-    }, 0);
   }, [log]);
+
+  useEffect(() => {
+    logsRef.current.scrollTop = logsRef.current.scrollHeight;
+  }, [logs]);
+
 
   return (
     <div className='dialog'>
       <div>Loading {spinner}</div>
-      <div>testarchive.zip{name}</div>
-      <div></div>
+      <div>{name}</div>
       <pre className='logs' ref={logsRef}>
         {logs.map((line, index) => (
           <Fragment key={index}>{index == logs.length - 1 ? "-" : "+"} {line + "\n"}</Fragment>

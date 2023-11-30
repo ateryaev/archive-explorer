@@ -74,7 +74,7 @@ export function testIfText(bytes) {
   for (let i = 0; i < checkSize; i++) {
     if (!isTextChar(bytes[i])) numOfBins++;
   }
-  const binRatio = (numOfBins + 1) / (checkSize + 1);
+  const binRatio = numOfBins / (checkSize + 1);
   return binRatio < 0.05;
 }
 export function testIfImage(filename) {

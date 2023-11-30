@@ -1,5 +1,5 @@
 import FilterForm from './FilterForm'
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import * as helper from '../utils/helpers'
 import FastPreview from './FastPreview';
 import ListFooter from './ListFooter';
@@ -11,15 +11,25 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
     const fileListRef = useRef(null);
     const [selectedIndex, setSelectedIndex] = useState(-1);
 
+    useEffect(() => {
+        const selectedDiv = document.querySelector("div.selected");
+        if (!selectedDiv) return;
+        const maxIndex = Math.min(renderSize, filesInPath.length) - 1;
+        if (selectedIndex == 0) {
+            fileListRef.current.scrollTop = 0;
+        } else if (selectedIndex == maxIndex) {
+            fileListRef.current.scrollTop = fileListRef.current.scrollHeight;
+        } else {
+            selectedDiv.scrollIntoView({ behavior: "instant", block: "nearest", inline: "nearest" });
+        }
+    }, [selectedIndex])
+
     function handleShowMore(e) {
         e.preventDefault();
         setRenderSize(renderSize + defaultRenderSize);
     }
 
-    function handleShowPreview(index, e) {
-        setTimeout(() => {
-            e.target.scrollIntoView({ behavior: "instant", block: "nearest", inline: "nearest" })
-        }, 0);
+    function handleShowPreview(index) {
         if (index == selectedIndex) {
             setSelectedIndex(-1);
         } else {
@@ -39,36 +49,22 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
 
     function handleKeyDown(e) {
         if (filesInPath.length == 0) return;
-        //console.log(e.code)
+        const maxIndex = Math.min(renderSize, filesInPath.length) - 1;
         let newSelectedIndex = selectedIndex;
         if (e.code === "ArrowUp") {
             newSelectedIndex = selectedIndex - 1;
-            if (newSelectedIndex < 0) {
-                fileListRef.current.scrollTop = 0;
-                newSelectedIndex = 0;
-            }
         } else if (e.code === "ArrowDown") {
             newSelectedIndex = selectedIndex + 1;
-            if (newSelectedIndex > filesInPath.length - 1) {
-                fileListRef.current.scrollTop = fileListRef.current.scrollHeight;
-                newSelectedIndex = filesInPath.length - 1;
-            }
         } else if (e.code === "Escape") {
             setSelectedIndex(-1);
-            e.preventDefault();
             return;
         } else {
             return;
         }
         e.preventDefault();
         if (newSelectedIndex < 0) newSelectedIndex = filesInPath.length - 1;
-        if (newSelectedIndex > filesInPath.length - 1) newSelectedIndex = 0;
+        if (newSelectedIndex > maxIndex) newSelectedIndex = 0;
         setSelectedIndex(newSelectedIndex);
-        setTimeout(async () => {
-            const selectedDiv = document.querySelector("div.selected");
-            if (!selectedDiv) return;
-            selectedDiv.scrollIntoView({ behavior: "instant", block: "nearest", inline: "nearest" })
-        }, 0);
     }
 
     function handleFilterApply(filter) {
@@ -85,7 +81,6 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
 
     return (<>
         <div className='page archive'>
-
             <div className='title infopanel'>
                 <div onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}><span>{name}</span></div>
             </div>

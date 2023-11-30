@@ -15,9 +15,8 @@
 body {
   background: #ccc;
 }
-
 .app {
-  margin: 0.5rem;
+  margin: 2px;
   position: fixed;
   top: 0;
   left: 0;
@@ -26,6 +25,12 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 240px;
+}
+
+@media only screen and (min-width: 768px) and (min-height:768px) {
+  .app {
+    margin:0.5rem;
+  }
 }
 
 .dialog {
@@ -43,16 +48,22 @@ body {
 
 .dialog>div {
   padding: 0.5rem;
+  word-wrap: break-word;
+  overflow-x: hidden;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
 
 .dialog>.logs {
-  xwhite-space: nowrap;
+  margin-top: 0.5rem;
+  border: 0.5rem solid var(--color-darkest);
+  padding: 0.0rem;
   text-overflow: ellipsis;
   overflow: hidden;
   background: var(--color-darkest);
   color: var(--color-hover);
-  max-height: 100px;
-  height: 100px;
+  max-height: 8rem;
+  height: 8rem;
 }
 
 .filelist {
@@ -313,6 +324,9 @@ button:active {
   min-width: 50px;
 }
 
+.credits {
+  padding: 0.5rem;
+}
 .credits,
 .credits * {
   text-align: center;
