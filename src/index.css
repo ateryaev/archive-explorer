@@ -373,17 +373,14 @@ img {
 
 .fastpreview button {
   width: fit-content;
-  xmargin-top: -0.5rem;
-  xright: 0;
   z-index: 1;
   padding: 0;
   width: 30px;
   height: 30px;
   border: 0;
-  xborder-radius: 25%;
-  fill: #bbb;
+  fill: var(--color-selected);
+  border: 2px solid var(--color-selected);
   background: #fff;
-  border: 2px solid #bbb;
   display: flex;
   justify-content: space-around;
   align-content: baseline;
@@ -396,8 +393,6 @@ img {
 
 .fastpreview button:hover {
   background-color: var(--color-hover);
-  fill: #777;
-  border-color: #777;
 }
 
 .fastpreview button:focus {

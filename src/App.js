@@ -58,6 +58,10 @@ function App() {
       await unarchive(rootFile, onProgress);
       let allfiles = rootFile.children === null ? [] : flatFiles(rootFile);
       allfiles.sort(function (a, b) { return a.name.localeCompare(b.name); })
+      if (allfiles.length ==0) {
+        rootFile.name = file.name;
+        allfiles = [rootFile];
+      }
       setFiles(allfiles);
       setAppState(PAGE_ARCHIVE);
       window.history.pushState(PAGE_ARCHIVE, null);
