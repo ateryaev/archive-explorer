@@ -57,10 +57,7 @@ const PageStart = ({ onFileSelected }) => {
         Drop archive file here.<br/>
         Supported formats: *.zip, *.gz, *.xz, *.tar.<br/>
         File will be processed localy.
-        
-      </div>
-      <div style={{opacity:0.75}}>
-        200M archive with 10,000 files and subarchives inside can take around one minute to process.<br /><br />
+        <br /><br />
       </div>
       <button onClick={handleClick}>open file</button>
     </div>

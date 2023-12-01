@@ -1,7 +1,7 @@
 :root {
   --color-hover: #def;
   --color-selected: blue;
-  --color-darkest: #444;
+  --color-darkest: #000;
 }
 
 * {
@@ -13,10 +13,11 @@
 }
 
 body {
-  background: #ccc;
+  background: #bbb;
 }
+
 .app {
-  margin: 2px;
+  margin: 0px;
   position: fixed;
   top: 0;
   left: 0;
@@ -25,11 +26,20 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 240px;
+  margin: 0rem;
 }
 
-@media only screen and (min-width: 768px) and (min-height:768px) {
-  .app {
-    margin:0.5rem;
+@media screen and (min-width: 600px) and (min-height: 600px) {
+}
+@media (pointer: coarse)  {
+}
+
+
+@media (hover: hover) {
+  button:focus, div:focus {
+    user-select: none;
+    box-shadow: inset 0 0 0 2px var(--color-hover);
+    outline: none;
   }
 }
 
@@ -38,7 +48,6 @@ body {
   margin: auto;
   padding: 1rem;
   align-items: center;
-  border: 2px solid var(--color-darkest);
   width: 90%;
   max-width: 600px;
   display: flex;
@@ -128,10 +137,6 @@ button {
   user-select: none;
 }
 
-button:focus {
-  box-shadow: inset 0 0 0 2px var(--color-hover);
-}
-
 button:hover {
   background: var(--color-hover);
   color: var(--color-darkest);
@@ -143,7 +148,7 @@ button:active {
 }
 
 .app>.page {
-  border: 2px solid var(--color-darkest);
+  xborder: 0px solid var(--color-darkest);
   color: #fff;
   overflow-y: hidden;
   height: fit-content;
@@ -159,13 +164,14 @@ button:active {
 
 .infopanel.title {
   background: var(--color-darkest);
-  border-bottom: 2px solid transparent;
   margin: 0;
+  margin-top: -2px;
   padding: 0.5rem;
 }
 
 .infopanel.title span {
   color: #fff;
+  padding: 0 0.5rem;
 }
 
 .infopanel>div {
@@ -178,17 +184,10 @@ button:active {
 }
 
 .infopanel.title button {
-  background: rgba(255, 255, 255, 0.2);
-  outline: 0;
-  border: 0;
-  color: rgba(255, 255, 255, 0.75);
-  fill: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  fill: #fff;
   text-decoration: none;
-
-}
-
-.infopanel.title button:focus {
-  box-shadow: inset 0 0 0 2px var(--color-hover);
 }
 
 .infopanel.title button.selected {
@@ -199,7 +198,6 @@ button:active {
 .infopanel.filter2 {
   margin: 0.5rem;
   padding: 0.5rem;
-  border: 2px solid #bbb;
   background: #eee;
   padding: 0.5rem 0;
 }
@@ -212,13 +210,14 @@ button:active {
   color: #666;
   position: sticky;
   left: 0.5rem;
-  xpadding: 0 0.5rem;
+  xborder-left: 2px solid rgba(0, 0, 0, 0.2);
+
 }
 
 .infopanel>div>span {
   display: block;
   line-height: 2.5rem;
-  padding: 0 0.5rem;
+  padding: 0 1rem;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -226,7 +225,7 @@ button:active {
 
 .infopanel>div {
   display: flex;
-  border: 2px solid #bbb;
+  xborder: 2px solid #000;
   background: #eee;
   display: flex;
   justify-content: space-between;
@@ -234,7 +233,8 @@ button:active {
 
 .infopanel>div>button {
   background: transparent;
-  color: var(--color-selected);
+  xcolor: var(--color-selected);
+  background: var(--color-selected);
   line-height: 2.5rem;
   height: 2.5rem;
   border: none;
@@ -253,7 +253,7 @@ button:active {
   color: #fff;
 }
 
-.infopanel>*>button:hover:not(.selected) {
+.infopanel button:hover:not(.selected) {
   background: var(--color-hover);
   color: var(--color-darkest);
   fill: var(--color-darkest);
@@ -262,21 +262,18 @@ button:active {
 /***********************/
 
 .filter2>div>button {
-  border: 0px solid #ddd;
   color: #fff;
   text-decoration: none;
   background: var(--color-selected);
-  height: 2rem;
-  margin: 4px;
+  margin: auto;
 }
 
-.filter2>input:not(:focus):hover {
+.filter2 input:not(:focus):hover {
   background: var(--color-hover);
   border-color: #bbb;
 }
 
 .filter2>div {
-  border: none;
   align-items: center;
 }
 
@@ -304,6 +301,7 @@ button:active {
   flex: 1;
   background: #eee;
   border: 2px solid #ddd;
+  margin: auto -0.5rem;
 }
 
 .filter2>div>input {
@@ -327,6 +325,7 @@ button:active {
 .credits {
   padding: 0.5rem;
 }
+
 .credits,
 .credits * {
   text-align: center;
@@ -366,18 +365,13 @@ img {
   display: block;
   background: #ddd;
   overflow: scroll;
-  border: 2px solid var(--color-darkest);
-  border-top: 0;
   padding: 0.5rem;
 }
 
 .fastpreview button {
-  width: fit-content;
-  z-index: 1;
   padding: 0;
   width: 30px;
   height: 30px;
-  border: 0;
   fill: var(--color-selected);
   border: 2px solid var(--color-selected);
   background: #fff;
@@ -395,11 +389,6 @@ img {
   background-color: var(--color-hover);
 }
 
-.fastpreview button:focus {
-  outline: 0;
-  box-shadow: inset 0 0 0 2px var(--color-hover);
-}
-
 .fastpreview>div>* {
   display: block;
 }
@@ -413,7 +402,6 @@ img {
 
 .fastpreview>div {
   gap: 0.5rem;
-  xborder: 1px solid red;
   display: flex;
   justify-content: space-around;
   align-content: baseline;
@@ -435,7 +423,6 @@ img {
 }
 
 div:focus {
-  box-shadow: inset 0 0 0 2px var(--color-hover);
   outline: 0;
 }
 

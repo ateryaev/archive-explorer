@@ -62,7 +62,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
             return;
         }
         e.preventDefault();
-        if (newSelectedIndex < 0) newSelectedIndex = filesInPath.length - 1;
+        if (newSelectedIndex < 0) newSelectedIndex = maxIndex;
         if (newSelectedIndex > maxIndex) newSelectedIndex = 0;
         setSelectedIndex(newSelectedIndex);
     }
@@ -82,7 +82,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
     return (<>
         <div className='page archive'>
             <div className='title infopanel'>
-                <div onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}><span>{name}</span></div>
+                <div><span onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{name}</span></div>
             </div>
             <div className='filelist' ref={fileListRef} tabIndex={2}
                 onKeyDown={handleKeyDown}>
