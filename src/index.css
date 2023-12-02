@@ -35,10 +35,11 @@ body {
 @media (pointer: coarse) {}
 
 button:focus:not(:active),
-  div:focus,
-  .fileRow:focus {
-    outline: none;
-  }
+div:focus,
+.fileRow:focus {
+  outline: none;
+}
+
 @media (hover: hover) {
 
   button:focus:not(:active),
@@ -70,6 +71,7 @@ button:focus:not(:active),
     fill: var(--color-darkest);
   }
 }
+
 .title2>button:active {
   background: rgba(255, 255, 255, 0.5);
 }
@@ -405,6 +407,7 @@ pre {
 .title2>div>button:not(.selected) {
   background: rgba(255, 255, 255, 0.2);
 }
+
 .title2>div>button:active {
   background: var(--color-hover);
   color: #000;
@@ -441,13 +444,11 @@ pre {
 
 img {
   max-width: calc(100% - 2rem);
-}
-
-img {
   border: 2px solid #777;
   background: #fff;
   padding: 1rem;
   margin: 1rem;
+  color: #000;
 }
 
 @media screen and (max-width: 420px) {
@@ -478,6 +479,7 @@ img {
   xcolor: #fff !important;
   xcolor: blue !important;
 }
+
 .submenu {
   background: #000;
   display: block !important;
@@ -486,6 +488,5 @@ img {
   z-index: 1000;
   right: 0rem;
   padding: 0px !important;
-  xpadding-bottom: 2px !important;
   box-shadow: 0px 2px 0 0px rgba(0, 0, 0, 0.1);
 }

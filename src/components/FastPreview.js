@@ -1,6 +1,9 @@
 import * as helper from '../utils/helpers'
 import { useState, useRef, useEffect } from 'react';
 
+const maxTxtSize = 1024 * 8;
+const maxHexSize = 1024;
+
 let scrollTransaction = 0;
 
 const FastPreview = ({ file, onDownload, onFullscreen, onFocus }) => {
@@ -8,9 +11,7 @@ const FastPreview = ({ file, onDownload, onFullscreen, onFocus }) => {
   const [format, setFormat] = useState("-unknown-");
   const [textPresentation, setTextPresentation] = useState("-unavailable-");
 
-  const maxTxtSize = 1024 * 8;
-  const maxHexSize = 1024;
-  const maxSize = format == "txt" ? maxTxtSize : maxHexSize;
+  const maxSize = format === "txt" ? maxTxtSize : maxHexSize;
   const renderSize = Math.min(file.bytes.byteLength, maxSize);
   const scrollDivRef = useRef(null);
   const scrollNameRef = useRef(null);
@@ -18,11 +19,10 @@ const FastPreview = ({ file, onDownload, onFullscreen, onFocus }) => {
   useEffect(() => {
     const fileFormat = helper.testIfText(file.bytes) ? "txt" : "bin";
     setFormat(fileFormat);
-
-    if (fileFormat == "txt") {
+    if (fileFormat === "txt") {
       setTextPresentation(helper.toTxtPreview(file.bytes, maxTxtSize));
     }
-    if (fileFormat == "bin") {
+    if (fileFormat === "bin") {
       setTextPresentation(helper.toHexPreview(file.bytes, maxHexSize));
     }
     scrollDivRef.current.scrollTo({ top: 0, left: 0 });
@@ -33,12 +33,11 @@ const FastPreview = ({ file, onDownload, onFullscreen, onFocus }) => {
       const transaction = scrollTransaction;
       await helper.sleep(1000);
       if (!scrollNameRef.current) return;
-      if (transaction == scrollTransaction) scrollNameRef.current.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      if (transaction === scrollTransaction) scrollNameRef.current.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       await helper.sleep(500);
       if (!scrollNameRef.current) return;
-      if (transaction == scrollTransaction) scrollNameRef.current.style.textOverflow = "ellipsis";
+      if (transaction === scrollTransaction) scrollNameRef.current.style.textOverflow = "ellipsis";
     }, 0);
-
   }, [file]);
 
   function handleNameOver(e) {
@@ -52,7 +51,7 @@ const FastPreview = ({ file, onDownload, onFullscreen, onFocus }) => {
     scrollNameRef.current.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     await helper.sleep(500);
     if (!scrollNameRef.current) return;
-    if (transaction == scrollTransaction) scrollNameRef.current.style.textOverflow = "ellipsis";
+    if (transaction === scrollTransaction) scrollNameRef.current.style.textOverflow = "ellipsis";
   }
 
   return (

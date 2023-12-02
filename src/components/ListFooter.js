@@ -4,7 +4,7 @@ const ListFooter = ({ current, total, unit, onMore }) => {
     status = "showing first " + current.toLocaleString() + " of " + total.toLocaleString() + " " + unit + "s";
   } else if (current > 1) {
     status = "showing all " + current.toLocaleString() + " " + unit + "s";
-  } else if (current == 1) {
+  } else if (current === 1) {
     status = "only 1 " + unit + " found";
   } else {
     status = "";
@@ -13,7 +13,7 @@ const ListFooter = ({ current, total, unit, onMore }) => {
     <div className='infopanel'>
       <div className='main'>
         <span className='main'>{status}&nbsp;</span>
-        {current != total && <button style={{ marginRight: "0.5rem" }} tabIndex="-1" onClick={onMore}>show more</button>}
+        {current !== total && <button style={{ marginRight: "0.5rem" }} tabIndex="-1" onClick={onMore}>show more</button>}
       </div>
     </div>
   );

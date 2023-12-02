@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef, Fragment } from 'react';
 
-const PageLoading = ({ name, log }) => {
+const PageLoading = ({ name, logs }) => {
   const logsRef = useRef(null);
-  const [logs, setLogs] = useState([]);
   const [spinner, setSpinner] = useState("...");
 
   useEffect(() => {
@@ -18,15 +17,8 @@ const PageLoading = ({ name, log }) => {
   }, []);
 
   useEffect(() => {
-    let newLogs = logs.slice(-10);
-    newLogs.push(log);
-    setLogs(newLogs);
-  }, [log]);
-
-  useEffect(() => {
     logsRef.current.scrollTop = logsRef.current.scrollHeight;
   }, [logs]);
-
 
   return (
     <div className='dialog'>
@@ -34,7 +26,7 @@ const PageLoading = ({ name, log }) => {
       <div>{name}</div>
       <pre className='logs' ref={logsRef}>
         {logs.map((line, index) => (
-          <Fragment key={index}>{index == logs.length - 1 ? "-" : "+"} {line + "\n"}</Fragment>
+          <Fragment key={index}>{index === logs.length - 1 ? "-" : "+"} {line + "\n"}</Fragment>
         ))}
       </pre>
     </div>

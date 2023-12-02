@@ -6,7 +6,7 @@ const PageStart = ({ onFileSelected }) => {
   const [dragFileOver, setDragFileOver] = useState(false);
 
   function handleFile(e) {
-    if (e.target.files.length == 0) return;
+    if (e.target.files.length === 0) return;
     const inputFile = e.target.files[0];
     onFileSelected(inputFile);
     console.log(inputFile.name);
@@ -54,8 +54,8 @@ const PageStart = ({ onFileSelected }) => {
       onDragLeave={handleDragLeave}>
       <div>
         <input type='file' id={id} onChange={handleFile} style={{ display: "none" }} />
-        Drop archive file here.<br/>
-        Supported formats: *.zip, *.gz, *.xz, *.tar.<br/>
+        Drop archive file here.<br />
+        Supported formats: *.zip, *.gz, *.xz, *.tar.<br />
         File will be processed localy.
         <br /><br />
       </div>

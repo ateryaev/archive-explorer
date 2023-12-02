@@ -4,53 +4,27 @@ import * as helper from '../utils/helpers'
 import FastPreview from './FastPreview';
 import ListFooter from './ListFooter';
 
+const sorts = ["name asc", "name desc", "size asc", "size desc"];
+const defaultRenderSize = 500;
+
+function sortFiles(filesToSort, sortByIndex) {
+    const compMult = sorts[sortByIndex].indexOf("desc") > 0 ? -1 : 1;
+    if (sorts[sortByIndex].slice(0, 4) === "size") {
+        filesToSort.sort(function (a, b) { return compMult * (a.bytes.byteLength - b.bytes.byteLength); });
+    } else {
+        filesToSort.sort(function (a, b) { return compMult * a.name.localeCompare(b.name); })
+    }
+}
+
 const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
     const [filter, setFilter] = useState("");
-    const defaultRenderSize = 500;
     const [renderSize, setRenderSize] = useState(defaultRenderSize);
-    const fileListRef = useRef(null);
-    const [selectedIndex, setSelectedIndex] = useState(-1);
-    const sorts = ["name asc", "name desc", "size asc", "size desc"];
-    const [sortBy, setSortBy] = useState(0);
-    const sortMenuRef = useRef(null);
-
     const [sortMenuActive, setSortMenuActive] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(-1);
+    const [sortBy, setSortBy] = useState(0);
 
-    useEffect(() => {
-        const selectedDiv = document.querySelector("div.selected");
-        if (!selectedDiv) return;
-        const maxIndex = Math.min(renderSize, filesInPath.length) - 1;
-        if (selectedIndex == 0) {
-            fileListRef.current.scrollTop = 0;
-        } else if (selectedIndex == maxIndex) {
-            fileListRef.current.scrollTop = fileListRef.current.scrollHeight;
-        } else {
-            selectedDiv.scrollIntoView({ behavior: "instant", block: "nearest", inline: "nearest" });
-        }
-    }, [selectedIndex])
-
-    function handleShowMore(e) {
-        e.preventDefault();
-        setRenderSize(renderSize + defaultRenderSize);
-    }
-
-    function handleShowPreview(index) {
-        if (index == selectedIndex) {
-            setSelectedIndex(-1);
-        } else {
-            setSelectedIndex(index);
-        }
-    }
-
-    function sortFiles(filesToSort) {
-        console.log("SORTING", sorts[sortBy])
-        const compMult = sorts[sortBy].indexOf("desc") > 0 ? -1 : 1;
-        if (sorts[sortBy].slice(0, 4) === "size") {
-            filesToSort.sort(function (a, b) { return compMult * (a.bytes.byteLength - b.bytes.byteLength); });
-        } else {
-            filesToSort.sort(function (a, b) { return compMult * a.name.localeCompare(b.name); })
-        }
-    }
+    const sortMenuRef = useRef(null);
+    const fileListRef = useRef(null);
 
     const filesInPath = useMemo(
         () => {
@@ -58,14 +32,42 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
             let filtered = files.filter((file) => {
                 return helper.isTextMatchFilters(file.name, filters);
             });
-            sortFiles(filtered);
+            sortFiles(filtered, sortBy);
             return filtered;
         },
         [files, filter, sortBy]
     );
 
+    useEffect(() => {
+        const selectedDiv = document.querySelector("div.selected");
+        if (!selectedDiv) return;
+        const maxIndex = Math.min(renderSize, filesInPath.length) - 1;
+        if (selectedIndex === 0) {
+            fileListRef.current.scrollTop = 0;
+        } else if (selectedIndex === maxIndex) {
+            fileListRef.current.scrollTop = fileListRef.current.scrollHeight;
+        } else {
+            selectedDiv.scrollIntoView({ behavior: "instant", block: "nearest", inline: "nearest" });
+        }
+    }, [selectedIndex, filesInPath, renderSize])
+
+    function handleShowMore(e) {
+        e.preventDefault();
+        setRenderSize(renderSize + defaultRenderSize);
+    }
+
+    function handleShowPreview(index) {
+        if (index === selectedIndex) {
+            setSelectedIndex(-1);
+        } else {
+            setSelectedIndex(index);
+        }
+    }
+
+
+
     function handleKeyDown(e) {
-        if (filesInPath.length == 0) return;
+        if (filesInPath.length === 0) return;
         const maxIndex = Math.min(renderSize, filesInPath.length) - 1;
         let newSelectedIndex = selectedIndex;
         if (e.code === "ArrowUp") {
@@ -138,7 +140,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
                 </FilterForm>
 
                 {filesInPath.slice(0, renderSize).map((file, index) => (
-                    <div key={index} className={selectedIndex == index ? 'fileRow selected' : 'fileRow'}
+                    <div key={index} className={selectedIndex === index ? 'fileRow selected' : 'fileRow'}
                         onClick={(e) => handleShowPreview(index, e)}>
                         <div>
                             {file.name}
@@ -148,7 +150,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
 
                     </div>
                 ))}
-                {Math.min(renderSize, filesInPath.length) == 0 && <div className="empty"><br />nothing was found<br /> change filter<br /><br /></div>}
+                {Math.min(renderSize, filesInPath.length) === 0 && <div className="empty"><br />nothing was found<br /> change filter<br /><br /></div>}
                 <ListFooter
                     current={Math.min(renderSize, filesInPath.length)}
                     total={filesInPath.length} unit={"file"}

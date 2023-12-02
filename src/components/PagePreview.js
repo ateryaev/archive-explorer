@@ -3,6 +3,8 @@ import * as helper from '../utils/helpers'
 import { useState, useRef, useMemo, useEffect } from 'react';
 import ListFooter from './ListFooter';
 
+const defaultRenderSize = 1024 * 50;
+
 
 const PagePreview = ({ file, onBack, onDownload }) => {
   function getFileType(file) {
@@ -10,12 +12,10 @@ const PagePreview = ({ file, onBack, onDownload }) => {
     if (helper.testIfImage(file.name)) return "img";
     return "bin"
   }
-
   const fileType = getFileType(file);
-  const defaultRenderSize = 1024 * 50;
-
   const [filter, setFilter] = useState("");
   const [renderSize, setRenderSize] = useState(defaultRenderSize);
+  const renderHexSize = renderSize / 8;
   const previewRef = useRef(null);
   const [previewAs, setPreviewAs] = useState(fileType);
   const [linesFound, setLinesFound] = useState(0);
@@ -25,7 +25,7 @@ const PagePreview = ({ file, onBack, onDownload }) => {
 
   //const [previewRawText, setFoundSize] = useState(0);
 
-  const renderHexSize = renderSize / 8;
+
 
   useEffect(() => {
   }, [file]);
@@ -53,7 +53,7 @@ const PagePreview = ({ file, onBack, onDownload }) => {
       helper.log(" HEX PREVIEW DONE");
       return hex;
     },
-    [file, renderSize, previewAs]
+    [file, renderHexSize, /*renderSize,*/ previewAs]
   );
 
   function handleShowMore(e) {
@@ -82,16 +82,13 @@ const PagePreview = ({ file, onBack, onDownload }) => {
       const arr = file.bytes.slice(0, 1024 * 1024 * 30);//e.g. max 30Mb
       const fullText = enc.decode(arr);
       const lines = fullText.split("\n");
-      //const f = filter.toUpperCase();
       const filters = filter.toUpperCase().split(" ");
       let fullTextFiltered = "";
       let occurrence = 0;
       let resLen = 0;
       let resPreviewLen = 0;
-      lines.map((line, index) => {
-
+      lines.forEach((line, index) => {
         if (!helper.isTextMatchFilters(line, filters)) return;
-
         resLen += line.length + 1;
         if (resLen <= renderSize) {
           line = line.slice(0, -(resLen - renderSize));
@@ -156,7 +153,7 @@ const PagePreview = ({ file, onBack, onDownload }) => {
             {filter.trim() !== "" && <>{linesFound.toLocaleString()} lines</>}
           </FilterForm>)}
 
-        {(previewAs === "img") && (<img src={fileUrl} onLoad={handleImageLoad} onError={handleImageError} />)}
+        {(previewAs === "img") && (<img alt="" src={fileUrl} onLoad={handleImageLoad} onError={handleImageError} />)}
         {(previewAs === "txt") && <pre>{fileTextFiltered}</pre>}
         {(previewAs === "bin") && <pre>{fileHex}</pre>}
 

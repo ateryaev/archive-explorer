@@ -21,7 +21,7 @@ async function unarchiveOne(file, onProgress) {
 
 export async function unarchive(file, onProgress) {
     await unarchiveOne(file, onProgress);
-    if (file.children == null) {
+    if (file.children === null) {
         //file.bytes = null; //clear memory in case of HUGE archive
         return;
     }
@@ -33,7 +33,7 @@ export async function unarchive(file, onProgress) {
 export function flatFiles(file) {
     if (file.children === null) return [file];
     let files = [];
-    if (file.children.length == 1 && file.children[0].children !== null) {
+    if (file.children.length === 1 && file.children[0].children !== null) {
         if (file.name.indexOf(file.children[0].name) > -1) {
             file.children[0].name = file.name;
             files.push(...flatFiles(file.children[0]));
@@ -132,8 +132,8 @@ function IsTar(bytes) {
     if (!IsChar(bytes[0])) return false;
     if (bytes[99] !== 0) return false;
     //ustar magic word
-    if (!(bytes[257] == 117 && bytes[258] == 115 && bytes[259] == 116 &&
-        bytes[260] == 97 && bytes[261] == 114)) return false;
+    if (!(bytes[257] === 117 && bytes[258] === 115 && bytes[259] === 116 &&
+        bytes[260] === 97 && bytes[261] === 114)) return false;
     let isCharsOver = false;
     for (let i = 1; i < 99; i++) {
         if (bytes[i] === 0) isCharsOver = true;

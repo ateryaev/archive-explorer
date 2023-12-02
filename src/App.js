@@ -18,21 +18,14 @@ function App() {
   const [files, setFiles] = useState([]);
   const [previewFile, setPreviewFile] = useState(null);
   const [archiveName, setArchiveName] = useState("");
-  const [loadingLog, setLoadingLog] = useState("");
+  const [loadingLogs, setLoadingLogs] = useState([]);
 
   useEffect(() => {
     window.history.replaceState(PAGE_START, "");
-  }, [])
-
-  useEffect(() => {
     window.onpopstate = function (e) {
-      console.log("POP", e.state, files.length);
       if (e.state === PAGE_START) {
         setAppState(PAGE_START);
       }
-      // if (e.state === PAGE_LOADING) {
-      //   setAppState(PAGE_LOADING);
-      // }
       if (e.state === PAGE_ARCHIVE) {
         setAppState(PAGE_ARCHIVE);
       }
@@ -40,17 +33,19 @@ function App() {
         setAppState(PAGE_PREVIEW);
       }
     }
-  }, [files])
+  }, [])
 
+  let logs = [];
   function onProgress(msg) {
-    console.log(msg);
-    setLoadingLog(msg);
+    logs.push(msg);
+    logs = logs.slice(-10);
+    setLoadingLogs(logs);
   }
 
   async function handleFileSelected(file) {
     setAppState(PAGE_LOADING, null);
     setArchiveName(file.name);
-    setLoadingLog("reading " + file.name);
+    onProgress("reading " + file.name);
     try {
       const buffer = await file.arrayBuffer();
       const bytes = new Uint8Array(buffer);
@@ -58,7 +53,7 @@ function App() {
       await unarchive(rootFile, onProgress);
       let allfiles = rootFile.children === null ? [] : flatFiles(rootFile);
       allfiles.sort(function (a, b) { return a.name.localeCompare(b.name); })
-      if (allfiles.length == 0) {
+      if (allfiles.length === 0) {
         rootFile.name = file.name;
         allfiles = [rootFile];
       }
@@ -70,16 +65,19 @@ function App() {
       setAppState(PAGE_START);
     }
   }
+
   function handleDownload(file) {
     console.log("handleDownload", file);
     helper.Download(file.bytes, file.name);
   }
+
   function handleFullscreen(file) {
     window.history.pushState(PAGE_PREVIEW, null);
     console.log("handleFullscreen");
     setPreviewFile(file);
     setAppState(PAGE_PREVIEW);
   }
+
   function handleBack() {
     setAppState(PAGE_ARCHIVE);
     window.history.back();
@@ -88,7 +86,7 @@ function App() {
   return (
     <div className={"app " + appState}>
       {appState === PAGE_START && (<PageStart onFileSelected={handleFileSelected} />)}
-      {appState === PAGE_LOADING && (<PageLoading name={archiveName} log={loadingLog} />)}
+      {appState === PAGE_LOADING && (<PageLoading name={archiveName} logs={loadingLogs} />)}
       {(appState === PAGE_ARCHIVE || appState === PAGE_PREVIEW) && (<PageArchive onDownload={handleDownload} onFullscreen={handleFullscreen} name={archiveName} files={files} />)}
       {appState === PAGE_PREVIEW && (<PagePreview onBack={handleBack} onDownload={handleDownload} file={previewFile} />)}
       {appState !== PAGE_ARCHIVE && appState !== PAGE_PREVIEW && (<Credits />)}

@@ -14,7 +14,7 @@ export function isSymbolChar(byte) {
 }
 
 export function isTextChar(byte) {
-  return isSymbolChar(byte) || (byte == 10) || (byte == 13) || (byte == 9);
+  return isSymbolChar(byte) || (byte === 10) || (byte === 13) || (byte === 9);
 }
 
 export function sizeToString(filesize) {
@@ -28,7 +28,7 @@ export function sizeToString(filesize) {
   }
   let decimals = 1;
 
-  if (unitCount.toFixed(1).slice(-2) == ".0") decimals = 0;
+  if (unitCount.toFixed(1).slice(-2) === ".0") decimals = 0;
 
   return unitCount.toFixed(decimals) + unitNames[unitIndex];
 }
@@ -37,7 +37,7 @@ export function sizeToBytesString(filesize) {
   let sizeStr = filesize + "";
   let newStr = "";
 
-  while (sizeStr != "") {
+  while (sizeStr !== "") {
     newStr = sizeStr.slice(-3) + "," + newStr;
     sizeStr = sizeStr.slice(0, -3);
   }
@@ -95,10 +95,10 @@ export function toHexPreview(bytes, size) {
   for (let i = 0; i < len; i++) {
     const outOfBound = i >= bytes.byteLength;
     const byte = outOfBound ? 0 : bytes[i];
-    if (i % 16 == 0) {
+    if (i % 16 === 0) {
       str += ("00000000" + i.toString(16)).slice(-8) + " | ";
     }
-    if (i % 16 == 8) str += " ";
+    if (i % 16 === 8) str += " ";
     if (!outOfBound) {
       str += ("00" + byte.toString(16)).slice(-2) + " ";
       txt += isSymbolChar(byte) ? String.fromCharCode(byte) : ".";
@@ -106,7 +106,7 @@ export function toHexPreview(bytes, size) {
       str += "   ";
       txt += " ";
     }
-    if (i % 16 == 15) {
+    if (i % 16 === 15) {
       str += "| " + txt + "\n";
       txt = "";
     }
@@ -119,10 +119,10 @@ export function isTextMatchFilters(text, filters) {
     if (f.length < 1) continue;
     if (f.length > 1 && f[0] === "!") {
       const notF = f.slice(1);
-      if (text.toUpperCase().indexOf(notF) != -1) return false;
+      if (text.toUpperCase().indexOf(notF) !== -1) return false;
     } else {
-      if (text.toUpperCase().indexOf(f) == -1) return false;
-    }    
+      if (text.toUpperCase().indexOf(f) === -1) return false;
+    }
   }
   return true;
 }
