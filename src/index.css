@@ -29,14 +29,16 @@ body {
   margin: 0rem;
 }
 
-@media screen and (min-width: 600px) and (min-height: 600px) {
-}
-@media (pointer: coarse)  {
-}
+@media screen and (min-width: 600px) and (min-height: 600px) {}
+
+@media (pointer: coarse) {}
 
 
 @media (hover: hover) {
-  button:focus, div:focus {
+
+  button:focus,
+  div:focus,
+  .fileRow:focus {
     user-select: none;
     box-shadow: inset 0 0 0 2px var(--color-hover);
     outline: none;
@@ -77,7 +79,6 @@ body {
 
 .filelist {
   background: #fff;
-  xborder-top: 2px solid #000;
   overflow-y: scroll;
   flex: 1;
 }
@@ -95,12 +96,15 @@ body {
   margin: 0 0.5rem;
 }
 
-.fileRow.selected {
-  background: #44f;
-  color: #fff;
+.empty {
+  color: #777;
+  padding: 0.5rem;
+  text-align: center;
+}
 
-  xcolor: #fff !important;
-  xfont-weight: bold;
+.fileRow.selected {
+  background: var(--color-selected);
+  color: #fff;
 }
 
 .fileRow>div {
@@ -162,62 +166,36 @@ button:active {
   flex: 1
 }
 
-.infopanel.title {
-  background: var(--color-darkest);
-  margin: 0;
-  margin-top: -2px;
-  padding: 0.5rem;
-}
-
-.infopanel.title span {
-  color: #fff;
-  padding: 0 0.5rem;
-}
-
 .infopanel>div {
   overflow: hidden;
 }
 
-.infopanel.title>* {
-  background: transparent;
-  border: 0;
-}
+.infopanel.filter2 {
+  background: #eee;
+  padding: 0.5rem 0;
 
-.infopanel.title button {
-  background: rgba(255, 255, 255, 0.3);
-  color: #fff;
-  fill: #fff;
-  text-decoration: none;
-}
-
-.infopanel.title button.selected {
-  background: #fff;
-  color: #000;
 }
 
 .infopanel.filter2 {
-  margin: 0.5rem;
-  padding: 0.5rem;
-  background: #eee;
-  padding: 0.5rem 0;
+  margin-bottom: 0.5rem;
+}
+
+.infopanel:not(.filter2) {
+  margin-top: 0.5rem;
 }
 
 .infopanel {
-  margin: 0.5rem;
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
   color: #666;
   position: sticky;
-  left: 0.5rem;
-  xborder-left: 2px solid rgba(0, 0, 0, 0.2);
-
+  left: 0rem;
 }
 
 .infopanel>div>span {
   display: block;
-  line-height: 2.5rem;
-  padding: 0 1rem;
+  padding: 0.5rem 1rem;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -225,27 +203,18 @@ button:active {
 
 .infopanel>div {
   display: flex;
-  xborder: 2px solid #000;
   background: #eee;
   display: flex;
   justify-content: space-between;
 }
 
 .infopanel>div>button {
-  background: transparent;
-  xcolor: var(--color-selected);
   background: var(--color-selected);
-  line-height: 2.5rem;
-  height: 2.5rem;
   border: none;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 0.5rem;
-}
-
-.infopanel>*>button:has(svg) {
-  aspect-ratio: 1/1;
 }
 
 .infopanel>*>button.selected {
@@ -265,13 +234,13 @@ button:active {
   color: #fff;
   text-decoration: none;
   background: var(--color-selected);
-  margin: auto;
+  align-content: stretch;
+
 }
 
-.filter2 input:not(:focus):hover {
+/* .filter2 input:not(:focus):hover {
   background: var(--color-hover);
-  border-color: #bbb;
-}
+} */
 
 .filter2>div {
   align-items: center;
@@ -281,9 +250,14 @@ button:active {
   cursor: text;
 }
 
+.filter2>div.inputButton:hover {
+  background: var(--color-hover);
+  border-color: #aaa;
+}
+
 .filter2>div.inputButton:has(*:focus) {
   background: #fff;
-  border-color: #bbb;
+  border-color: #aaa;
 }
 
 .filter2 input:focus::placeholder {
@@ -299,19 +273,20 @@ button:active {
 
 .filter2>div.inputButton {
   flex: 1;
-  background: #eee;
+  align-items: stretch;
+  align-content: stretch;
+  background: transparent;
   border: 2px solid #ddd;
-  margin: auto -0.5rem;
+  margin: 2px -0.5rem;
+  padding: 2px;
 }
 
 .filter2>div>input {
   cursor: pointer;
   display: block;
   flex: 1;
-  line-height: 2.5rem;
-  border-color: #ddd;
-  border: none;
-  padding: 0 0.5rem;
+  border: 0;
+  padding: 0.5rem;
   outline: 0;
   display: block;
   background: transparent;
@@ -345,13 +320,6 @@ pre {
   xwhite-space: pre-wrap;
   xoverflow-wrap: break-word;
 
-}
-
-img {
-  border: 2px solid black;
-  background: #fff;
-  padding: 1rem;
-  margin: 1rem;
 }
 
 .preview {
@@ -434,4 +402,76 @@ div:focus {
 
 .PAGE_PREVIEW .archive {
   display: none;
+}
+
+/* title */
+.title2 {
+  background: var(--color-darkest);
+  display: flex;
+}
+
+.title2>* {
+  xborder: 1px solid red;
+}
+
+.title2>div>button.selected {
+  background: #fff;
+  color: #000;
+}
+
+.title2>div>button:not(.selected) {
+  background: rgba(255, 255, 255, 0.3);
+  xbackground: #eee;
+
+}
+
+.title2>button>svg {
+  display: block;
+  margin: auto;
+}
+
+.title2>button {
+  background: transparent;
+  width: 46px;
+  padding: 0;
+}
+
+.title2 button:hover {
+  color: var(--color-hover);
+  fill: var(--color-hover);
+}
+
+.title2>div>button:hover:not(.selected) {
+  color: #000;
+  background: var(--color-hover);
+  fill: #000;
+}
+
+.title2>button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.title2>div {
+  padding: 0.5rem;
+  display: flex;
+  overflow: hidden;
+}
+
+.title2>div>span {
+  display: block;
+  padding: 0.5rem 0rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+img {
+  max-width: calc(100% - 2rem);
+}
+
+img {
+  border: 2px solid #777;
+  background: #fff;
+  padding: 1rem;
+  margin: 1rem;
 }

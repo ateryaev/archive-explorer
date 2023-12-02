@@ -34,6 +34,7 @@ const FilterForm = ({ filter, onChange, children }) => {
                     onInput={handleInput}
                     type='text'
                     onKeyDown={handleKeyDown}
+                    autoCorrect="off" autoCapitalize="none"
                 />
                 {(filter !== preFilter) && (
                     <button tabIndex={1} onClick={handleApply}>apply</button>

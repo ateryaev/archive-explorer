@@ -21,6 +21,7 @@ const PagePreview = ({ file, onBack, onDownload }) => {
   const [linesFound, setLinesFound] = useState(0);
   const [foundSize, setFoundSize] = useState(0);
   const [foundPreviewSize, setFoundPreviewSize] = useState(0);
+  const [imgInfo, setImgInfo] = useState({ width: 0, height: 0 });
 
   //const [previewRawText, setFoundSize] = useState(0);
 
@@ -121,26 +122,31 @@ const PagePreview = ({ file, onBack, onDownload }) => {
     e.preventDefault();
     previewRef.current.scrollTo({ top: 0, behavior: 'smooth' });
   }
+  function handleImageLoad(e) {
+    //console.log(e.target.naturalHeight, e.target.naturalWidth)
+    setImgInfo({ width: e.target.naturalWidth, height: e.target.naturalHeight, error: false });
+  }
+  function handleImageError(e) {
+    setImgInfo({ width: "???", height: "???", error: true });
+
+  }
 
   return (
     <div className='page'>
-      <div className='infopanel title'>
-        <div>
-          <button onClick={onBack}>
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M360-240 120-480l240-240 56 56-144 144h568v80H272l144 144-56 56Z" /></svg>
-          </button>
-        </div>
+      <div className='title2'>
+        <button onClick={onBack}>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M360-240 120-480l240-240 56 56-144 144h568v80H272l144 144-56 56Z" /></svg>
+        </button>
         <div className='main'><span onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{file.name}</span></div>
         <div>
           <button onClick={(e) => handlePreviewAs(e, "txt")} className={previewAs === "txt" ? 'selected' : ''}>txt</button>
           <button onClick={(e) => handlePreviewAs(e, "bin")} className={previewAs === "bin" ? 'selected' : ''}>bin</button>
           <button onClick={(e) => handlePreviewAs(e, "img")} className={previewAs === "img" ? 'selected' : ''}>img</button>
         </div>
-        <div>
-          <button onClick={() => onDownload(file)}>
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" /></svg>
-          </button>
-        </div>
+        <button onClick={() => onDownload(file)}>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" /></svg>
+        </button>
+
       </div>
 
       <div className='preview' ref={previewRef}>
@@ -150,7 +156,7 @@ const PagePreview = ({ file, onBack, onDownload }) => {
             {filter.trim() !== "" && <>{linesFound.toLocaleString()} lines</>}
           </FilterForm>)}
 
-        {(previewAs === "img") && (<img src={fileUrl} />)}
+        {(previewAs === "img") && (<img src={fileUrl} onLoad={handleImageLoad} onError={handleImageError} />)}
         {(previewAs === "txt") && <pre>{fileTextFiltered}</pre>}
         {(previewAs === "bin") && <pre>{fileHex}</pre>}
 
@@ -165,6 +171,15 @@ const PagePreview = ({ file, onBack, onDownload }) => {
             current={Math.min(renderSize, foundPreviewSize)}
             total={foundSize} unit={"byte"}
             onMore={handleShowMore} />
+        )}
+
+        {(previewAs === "img") && (
+          <div className='infopanel'>
+            <div className='main'>
+              {(!imgInfo.error) && <span className='main'>original size: {imgInfo.width} by {imgInfo.height} pixels</span>}
+              {(imgInfo.error) && <span className='main'>image error, not an image?</span>}
+            </div>
+          </div>
         )}
       </div>
     </div>

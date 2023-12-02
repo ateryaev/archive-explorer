@@ -81,8 +81,8 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
 
     return (<>
         <div className='page archive'>
-            <div className='title infopanel'>
-                <div><span onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{name}</span></div>
+            <div className='title2'>
+                <div className='main' style={{ paddingLeft: "1rem" }}><span onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{name}</span></div>
             </div>
             <div className='filelist' ref={fileListRef} tabIndex={2}
                 onKeyDown={handleKeyDown}>
@@ -99,6 +99,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
                         <div>{helper.sizeToString(file.bytes.byteLength)}</div>
                     </div>
                 ))}
+                {Math.min(renderSize, filesInPath.length) == 0 && <div className="empty"><br />nothing was found<br /> change filter<br /><br /></div>}
                 <ListFooter
                     current={Math.min(renderSize, filesInPath.length)}
                     total={filesInPath.length} unit={"file"}
