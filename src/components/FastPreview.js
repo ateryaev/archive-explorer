@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 
 let scrollTransaction = 0;
 
-const FastPreview = ({ file, onDownload, onFullscreen }) => {
+const FastPreview = ({ file, onDownload, onFullscreen, onFocus }) => {
 
   const [format, setFormat] = useState("-unknown-");
   const [textPresentation, setTextPresentation] = useState("-unavailable-");
@@ -56,7 +56,7 @@ const FastPreview = ({ file, onDownload, onFullscreen }) => {
   }
 
   return (
-    <div className='fastpreview' tabIndex={3} ref={scrollDivRef}>
+    <div className='fastpreview' ref={scrollDivRef} onFocus={onFocus}>
       <div>
         <span ref={scrollNameRef}
           onMouseLeave={handleNameLeave}

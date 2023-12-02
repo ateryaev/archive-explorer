@@ -134,16 +134,16 @@ const PagePreview = ({ file, onBack, onDownload }) => {
   return (
     <div className='page'>
       <div className='title2'>
-        <button onClick={onBack} title="back">
+        <button onClick={onBack} title="back" tabIndex="1">
           <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M360-240 120-480l240-240 56 56-144 144h568v80H272l144 144-56 56Z" /></svg>
         </button>
         <div className='main'><span title={file.name} onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{file.name}</span></div>
         <div title="preview as...">
-          <button onClick={(e) => handlePreviewAs(e, "txt")} className={previewAs === "txt" ? 'selected' : ''}>txt</button>
-          <button onClick={(e) => handlePreviewAs(e, "bin")} className={previewAs === "bin" ? 'selected' : ''}>bin</button>
-          <button onClick={(e) => handlePreviewAs(e, "img")} className={previewAs === "img" ? 'selected' : ''}>img</button>
+          <button tabIndex="1" onClick={(e) => handlePreviewAs(e, "txt")} className={previewAs === "txt" ? 'selected' : ''}>txt</button>
+          <button tabIndex="1" onClick={(e) => handlePreviewAs(e, "bin")} className={previewAs === "bin" ? 'selected' : ''}>bin</button>
+          <button tabIndex="1" onClick={(e) => handlePreviewAs(e, "img")} className={previewAs === "img" ? 'selected' : ''}>img</button>
         </div>
-        <button onClick={() => onDownload(file)} title="download">
+        <button tabIndex="1" onClick={() => onDownload(file)} title="download">
           <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" /></svg>
         </button>
 

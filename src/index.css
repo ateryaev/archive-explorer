@@ -10,6 +10,7 @@
   margin: 0;
   padding: 0;
   font-size: 14px;
+  line-height: 16px;
 }
 
 body {
@@ -29,21 +30,50 @@ body {
   margin: 0rem;
 }
 
-@media screen and (min-width: 600px) and (min-height: 600px) {}
+
 
 @media (pointer: coarse) {}
 
-
+button:focus:not(:active),
+  div:focus,
+  .fileRow:focus {
+    outline: none;
+  }
 @media (hover: hover) {
 
-  button:focus,
+  button:focus:not(:active),
   div:focus,
   .fileRow:focus {
     user-select: none;
     box-shadow: inset 0 0 0 2px var(--color-hover);
     outline: none;
   }
+
+  .title2 button:hover {
+    color: var(--color-hover);
+    fill: var(--color-hover);
+  }
+
+  .title2>div>button:hover:not(.selected) {
+    color: #000;
+    background: var(--color-hover);
+    fill: #000;
+  }
+
+  .fileRow:not(.selected):hover {
+    background: var(--color-hover);
+  }
+
+  button:hover {
+    background: var(--color-hover);
+    color: var(--color-darkest);
+    fill: var(--color-darkest);
+  }
 }
+.title2>button:active {
+  background: rgba(255, 255, 255, 0.5);
+}
+
 
 .dialog {
   background: #fff;
@@ -83,18 +113,6 @@ body {
   flex: 1;
 }
 
-.preview .filelist {
-  background: #ddd;
-}
-
-.fileRow {
-  display: grid;
-  grid-template-columns: auto 90px;
-  padding: 0.5rem;
-  color: #000;
-  cursor: pointer;
-  margin: 0 0.5rem;
-}
 
 .empty {
   color: #777;
@@ -107,6 +125,16 @@ body {
   color: #fff;
 }
 
+
+.fileRow {
+  display: grid;
+  grid-template-columns: auto 90px;
+  padding: 0.5rem;
+  color: #000;
+  cursor: pointer;
+  margin: 0 0.5rem;
+}
+
 .fileRow>div {
   overflow: hidden;
   overflow-wrap: break-word;
@@ -117,10 +145,6 @@ body {
 .fileRow>div:last-child {
   text-align: right;
   white-space: nowrap;
-}
-
-.fileRow:not(.selected):hover {
-  background: var(--color-hover);
 }
 
 .dialog.drag {
@@ -141,14 +165,13 @@ button {
   user-select: none;
 }
 
-button:hover {
-  background: var(--color-hover);
-  color: var(--color-darkest);
-  fill: var(--color-darkest);
-}
+
 
 button:active {
-  box-shadow: inset 0 0 0 2px var(--color-selected);
+  xbox-shadow: inset 0 0 0 2px var(--color-selected);
+  xopacity: 0.5;
+  background: var(--color-darkest);
+  color: #fff;
 }
 
 .app>.page {
@@ -207,39 +230,13 @@ button:active {
   justify-content: space-between;
 }
 
-.infopanel>div>button {
-  background: var(--color-selected);
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 0.5rem;
-}
-
 .infopanel>*>button.selected {
-  background: var(--color-selected);
+  xbackground: var(--color-selected);
   color: #fff;
-}
-
-.infopanel button:hover:not(.selected) {
-  background: var(--color-hover);
-  color: var(--color-darkest);
-  fill: var(--color-darkest);
 }
 
 /***********************/
 
-.filter2>div>button {
-  color: #fff;
-  text-decoration: none;
-  background: var(--color-selected);
-  align-content: stretch;
-
-}
-
-/* .filter2 input:not(:focus):hover {
-  background: var(--color-hover);
-} */
 
 .filter2>div {
   align-items: center;
@@ -314,11 +311,6 @@ button:active {
 pre {
   color: #000;
   padding: 1rem;
-  xword-wrap: break-word;
-  xoverflow-x: hidden;
-  xwhite-space: pre-wrap;
-  xoverflow-wrap: break-word;
-
 }
 
 .preview {
@@ -411,9 +403,11 @@ pre {
 }
 
 .title2>div>button:not(.selected) {
-  background: rgba(255, 255, 255, 0.3);
-  xbackground: #eee;
-
+  background: rgba(255, 255, 255, 0.2);
+}
+.title2>div>button:active {
+  background: var(--color-hover);
+  color: #000;
 }
 
 .title2>button>svg {
@@ -427,27 +421,16 @@ pre {
   padding: 0;
 }
 
-.title2 button:hover {
-  color: var(--color-hover);
-  fill: var(--color-hover);
-}
-
-.title2>div>button:hover:not(.selected) {
-  color: #000;
-  background: var(--color-hover);
-  fill: #000;
-}
-
-.title2>button:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
 .title2>div {
   padding: 0.5rem;
   display: flex;
   overflow: hidden;
 }
 
+/* .title2 button:active {
+  color: var(--color-hover);
+  fill: var(--color-hover);
+} */
 .title2>div>span {
   display: block;
   padding: 0.5rem 0rem;
@@ -465,4 +448,44 @@ img {
   background: #fff;
   padding: 1rem;
   margin: 1rem;
+}
+
+@media screen and (max-width: 420px) {
+  .fileRow {
+    display: flex;
+    flex-direction: column !important;
+  }
+
+  .fileRow>div {
+    text-align: left;
+  }
+
+  .fileRow>div:last-child {
+    text-align: left;
+    font-size: smaller;
+  }
+}
+
+.submenu>button {
+  width: 100% !important;
+  text-align: left;
+  padding: 1rem;
+}
+
+.submenu>button.selected {
+  xbackground: blue !important;
+  background: #fff;
+  xcolor: #fff !important;
+  xcolor: blue !important;
+}
+.submenu {
+  background: #000;
+  display: block !important;
+  position: absolute;
+  top: calc(2rem + 16px);
+  z-index: 1000;
+  right: 0rem;
+  padding: 0px !important;
+  xpadding-bottom: 2px !important;
+  box-shadow: 0px 2px 0 0px rgba(0, 0, 0, 0.1);
 }

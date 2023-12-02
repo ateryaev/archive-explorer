@@ -12,6 +12,9 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const sorts = ["name asc", "name desc", "size asc", "size desc"];
     const [sortBy, setSortBy] = useState(0);
+    const sortMenuRef = useRef(null);
+
+    const [sortMenuActive, setSortMenuActive] = useState(false);
 
     useEffect(() => {
         const selectedDiv = document.querySelector("div.selected");
@@ -72,6 +75,9 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         } else if (e.code === "Escape") {
             setSelectedIndex(-1);
             return;
+            // } else if (e.code === "Enter" && selectedIndex > -1) {
+            //     onFullscreen(filesInPath[selectedIndex]);
+            //     return;
         } else {
             return;
         }
@@ -94,14 +100,15 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
     }
 
     function handleSortClick() {
-        //const sorts = [["name ask", true], ["size", true], ]
-        //const newFiles = files.sort(function (a, b) { return a.name.localeCompare(b.name); })
-        //const newFiles = files.sort(function (a, b) { return a.bytes.byteLength - b.bytes.byteLength; })
-        // sortIdx = (sortIdx+1) % sorts.length;
-        // onSort(sorts[sortIdx]);
+        setSortMenuActive(!sortMenuActive);
+    }
 
-        setSortBy((sortBy + 1) % sorts.length);
-
+    function handleSort(index) {
+        setSortBy(index);
+        setSelectedIndex(-1);
+        setSortMenuActive(false);
+        fileListRef.current.focus();
+        fileListRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     return (<>
@@ -113,8 +120,18 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
                 <button onClick={handleSortClick} tabIndex={1} title={"current: " + sorts[sortBy]}>
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h240v80H120Zm0-200v-80h480v80H120Zm0-200v-80h720v80H120Z" /></svg>
                 </button>
+
+                {sortMenuActive && (
+                    <div ref={sortMenuRef} className='submenu'>
+                        {sorts.map((sort, index) => (
+                            <button tabIndex="1" key={index} onClick={() => handleSort(index)} className={sortBy === index ? "selected" : ""}>{sort}</button>
+                        ))}
+                    </div>
+                )}
             </div>
+
             <div className='filelist' ref={fileListRef} tabIndex={2}
+                onFocus={() => setSortMenuActive(false)}
                 onKeyDown={handleKeyDown}>
                 <FilterForm onChange={handleFilterApply} filter={filter}>
                     {filesInPath.length.toLocaleString()} files
@@ -139,7 +156,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
             </div>
         </div>
         {(selectedIndex >= 0) && (
-            <FastPreview
+            <FastPreview onFocus={() => setSortMenuActive(false)}
                 onDownload={() => onDownload(filesInPath[selectedIndex])}
                 onFullscreen={() => onFullscreen(filesInPath[selectedIndex])}
                 file={filesInPath[selectedIndex]} />
