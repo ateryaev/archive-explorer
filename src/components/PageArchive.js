@@ -10,6 +10,8 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
     const [renderSize, setRenderSize] = useState(defaultRenderSize);
     const fileListRef = useRef(null);
     const [selectedIndex, setSelectedIndex] = useState(-1);
+    const sorts = ["name asc", "name desc", "size asc", "size desc"];
+    const [sortBy, setSortBy] = useState(0);
 
     useEffect(() => {
         const selectedDiv = document.querySelector("div.selected");
@@ -37,14 +39,26 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         }
     }
 
+    function sortFiles(filesToSort) {
+        console.log("SORTING", sorts[sortBy])
+        const compMult = sorts[sortBy].indexOf("desc") > 0 ? -1 : 1;
+        if (sorts[sortBy].slice(0, 4) === "size") {
+            filesToSort.sort(function (a, b) { return compMult * (a.bytes.byteLength - b.bytes.byteLength); });
+        } else {
+            filesToSort.sort(function (a, b) { return compMult * a.name.localeCompare(b.name); })
+        }
+    }
+
     const filesInPath = useMemo(
         () => {
             const filters = filter.toUpperCase().split(" ");
-            return files.filter((file) => {
+            let filtered = files.filter((file) => {
                 return helper.isTextMatchFilters(file.name, filters);
             });
+            sortFiles(filtered);
+            return filtered;
         },
-        [files, filter]
+        [files, filter, sortBy]
     );
 
     function handleKeyDown(e) {
@@ -79,10 +93,26 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         fileListRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    function handleSortClick() {
+        //const sorts = [["name ask", true], ["size", true], ]
+        //const newFiles = files.sort(function (a, b) { return a.name.localeCompare(b.name); })
+        //const newFiles = files.sort(function (a, b) { return a.bytes.byteLength - b.bytes.byteLength; })
+        // sortIdx = (sortIdx+1) % sorts.length;
+        // onSort(sorts[sortIdx]);
+
+        setSortBy((sortBy + 1) % sorts.length);
+
+    }
+
     return (<>
         <div className='page archive'>
             <div className='title2'>
-                <div className='main' style={{ paddingLeft: "1rem" }}><span onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{name}</span></div>
+                <div className='main' style={{ paddingLeft: "1rem" }}>
+                    <span title={name} onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{name}</span>
+                </div>
+                <button onClick={handleSortClick} tabIndex={1} title={"current: " + sorts[sortBy]}>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h240v80H120Zm0-200v-80h480v80H120Zm0-200v-80h720v80H120Z" /></svg>
+                </button>
             </div>
             <div className='filelist' ref={fileListRef} tabIndex={2}
                 onKeyDown={handleKeyDown}>
@@ -96,7 +126,9 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
                         <div>
                             {file.name}
                         </div>
+
                         <div>{helper.sizeToString(file.bytes.byteLength)}</div>
+
                     </div>
                 ))}
                 {Math.min(renderSize, filesInPath.length) == 0 && <div className="empty"><br />nothing was found<br /> change filter<br /><br /></div>}

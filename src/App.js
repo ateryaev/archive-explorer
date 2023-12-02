@@ -25,7 +25,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    window.onpopstate = function(e) {
+    window.onpopstate = function (e) {
       console.log("POP", e.state, files.length);
       if (e.state === PAGE_START) {
         setAppState(PAGE_START);
@@ -58,7 +58,7 @@ function App() {
       await unarchive(rootFile, onProgress);
       let allfiles = rootFile.children === null ? [] : flatFiles(rootFile);
       allfiles.sort(function (a, b) { return a.name.localeCompare(b.name); })
-      if (allfiles.length ==0) {
+      if (allfiles.length == 0) {
         rootFile.name = file.name;
         allfiles = [rootFile];
       }

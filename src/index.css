@@ -173,10 +173,9 @@ button:active {
 .infopanel.filter2 {
   background: #eee;
   padding: 0.5rem 0;
-
 }
 
-.infopanel.filter2 {
+.infopanel {
   margin-bottom: 0.5rem;
 }
 
@@ -346,6 +345,7 @@ pre {
   display: flex;
   justify-content: space-around;
   align-content: baseline;
+  margin: -0.5rem 0;
 }
 
 .fastpreview button svg {
@@ -373,10 +373,6 @@ pre {
   display: flex;
   justify-content: space-around;
   align-content: baseline;
-  padding: 0 0.5rem !important;
-}
-
-.fastpreview div {
   padding: 0.5rem;
   color: #777;
   left: 0rem;
@@ -387,11 +383,6 @@ pre {
   color: #000;
   padding: 0.5rem;
   overflow: visible;
-  xborder: 1px solid red;
-}
-
-div:focus {
-  outline: 0;
 }
 
 /* to keep file list same state while previewing */
