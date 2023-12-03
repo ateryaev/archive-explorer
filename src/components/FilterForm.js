@@ -21,6 +21,11 @@ const FilterForm = ({ filter, onChange, children }) => {
         onChange(preFilter);
     }
 
+    function handleClear() {
+        setPreFilter("");
+        onChange("");
+    }
+
     return (
         <div className='infopanel filter2'>
             <div><span>Filter</span></div>
@@ -32,10 +37,13 @@ const FilterForm = ({ filter, onChange, children }) => {
                     ref={filterInputRef}
                     placeholder='no filter, try e.g. "apple banana !orange"'
                     onInput={handleInput}
-                    type='text'
+                    type='email'
                     onKeyDown={handleKeyDown}
-                    autoCorrect="off" autoCapitalize="none"
+                    autoCorrect="off" autoCapitalize="none" spellCheck="false" autoComplete="off"
                 />
+                {(filter === preFilter && filter !== "") && (
+                    <button tabIndex={1} onClick={handleClear} className='clear'>reset</button>
+                )}
                 {(filter !== preFilter) && (
                     <button tabIndex={1} onClick={handleApply}>apply</button>
                 )}

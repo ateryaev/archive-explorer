@@ -58,9 +58,9 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         if (!selectedDiv) return;
         const maxIndex = Math.min(renderSize, filesInPath.length) - 1;
         if (selectedIndex === 0) {
-            fileListRef.current.scrollTop = 0;
+            fileListRef.current.scrollTo({ top: 0, behavior: 'smooth' });
         } else if (selectedIndex === maxIndex) {
-            fileListRef.current.scrollTop = fileListRef.current.scrollHeight;
+            fileListRef.current.scrollTo({ top: fileListRef.current.scrollHeight, behavior: 'smooth' });
         } else {
             selectedDiv.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
         }

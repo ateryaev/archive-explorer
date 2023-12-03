@@ -46,6 +46,11 @@ div:focus,
 
 @media (hover: hover) {
 
+  button.clear:hover:not(:active) {
+    background: lightcoral;
+    color: #fff;
+  }
+
   button:focus:not(:active),
   div:focus,
   .fileRow:focus {
@@ -283,6 +288,25 @@ button:active {
   min-width: 50px;
 }
 
+button.clear {
+  background: red;
+  transform: translate(0px, -1000px);
+  width: 1px;
+  padding: 0;
+  margin-left: -100px;
+}
+
+button.clear:active {
+  background: #000;
+}
+
+.filter2:has(*:focus) button.clear {
+  transform: translate(0px, 0px);
+  width: fit-content;
+  padding: 0.5rem;
+  margin-left: auto;
+}
+
 .credits {
   padding: 0.5rem;
 }
@@ -404,7 +428,6 @@ pre {
 
 .title2>button {
   background: transparent;
-  xwidth: 46px;
   padding: 0 0.5rem;
 }
 
@@ -414,12 +437,6 @@ pre {
   overflow: hidden;
 }
 
-.title2>div:has(span) {}
-
-/* .title2 button:active {
-  color: var(--color-hover);
-  fill: var(--color-hover);
-} */
 .title2>div>span {
   display: block;
   padding: 0.5rem 0rem;
