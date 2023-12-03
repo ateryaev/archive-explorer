@@ -2,6 +2,7 @@ import FilterForm from './FilterForm'
 import * as helper from '../utils/helpers'
 import { useState, useRef, useMemo, useEffect } from 'react';
 import ListFooter from './ListFooter';
+import LongText from './LongText';
 
 const defaultRenderSize = 1024 * 50;
 
@@ -134,7 +135,10 @@ const PagePreview = ({ file, onBack, onDownload }) => {
         <button onClick={onBack} title="back" tabIndex="1">
           <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M360-240 120-480l240-240 56 56-144 144h568v80H272l144 144-56 56Z" /></svg>
         </button>
-        <div className='main'><span title={file.name} onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{file.name}</span></div>
+        <div className='main'>
+          <LongText title={file.name} onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{file.name}</LongText>
+          {/* <span title={file.name} onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{file.name}</span> */}
+        </div>
         <div title="preview as...">
           <button tabIndex="1" onClick={(e) => handlePreviewAs(e, "txt")} className={previewAs === "txt" ? 'selected' : ''}>txt</button>
           <button tabIndex="1" onClick={(e) => handlePreviewAs(e, "bin")} className={previewAs === "bin" ? 'selected' : ''}>bin</button>

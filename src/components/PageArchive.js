@@ -3,6 +3,7 @@ import { useState, useRef, useMemo, useEffect } from 'react';
 import * as helper from '../utils/helpers'
 import FastPreview from './FastPreview';
 import ListFooter from './ListFooter';
+import LongText from './LongText';
 
 const sorts = ["name asc", "name desc", "size asc", "size desc"];
 const defaultRenderSize = 500;
@@ -117,7 +118,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         <div className='page archive'>
             <div className='title2'>
                 <div className='main' style={{ paddingLeft: "1rem" }}>
-                    <span title={name} onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{name}</span>
+                    <LongText title={name} onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{name}</LongText>
                 </div>
                 <button onClick={handleSortClick} tabIndex={1} title={"current: " + sorts[sortBy]}>
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h240v80H120Zm0-200v-80h480v80H120Zm0-200v-80h720v80H120Z" /></svg>
@@ -132,7 +133,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
                 )}
             </div>
 
-            <div className='filelist' ref={fileListRef} tabIndex={2}
+            <div className='filelist' ref={fileListRef} tabIndex={1}
                 onFocus={() => setSortMenuActive(false)}
                 onKeyDown={handleKeyDown}>
                 <FilterForm onChange={handleFilterApply} filter={filter}>

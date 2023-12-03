@@ -219,7 +219,8 @@ button:active {
 
 .infopanel>div>span {
   display: block;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0rem;
+  margin: 0 1rem;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -232,13 +233,7 @@ button:active {
   justify-content: space-between;
 }
 
-.infopanel>*>button.selected {
-  xbackground: var(--color-selected);
-  color: #fff;
-}
-
 /***********************/
-
 
 .filter2>div {
   align-items: center;

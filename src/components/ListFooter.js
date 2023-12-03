@@ -1,3 +1,5 @@
+import LongText from "./LongText";
+
 const ListFooter = ({ current, total, unit, onMore }) => {
   let status = "";
   if (current < total) {
@@ -7,12 +9,13 @@ const ListFooter = ({ current, total, unit, onMore }) => {
   } else if (current === 1) {
     status = "only 1 " + unit + " found";
   } else {
-    status = "";
+    status = "&nbsp;";
   }
+
   return (
     <div className='infopanel'>
       <div className='main'>
-        <span className='main'>{status}&nbsp;</span>
+        <LongText className='main'>{status}</LongText>
         {current !== total && <button style={{ marginRight: "0.5rem" }} tabIndex="-1" onClick={onMore}>show more</button>}
       </div>
     </div>
