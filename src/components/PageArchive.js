@@ -1,8 +1,9 @@
 import FilterForm from './FilterForm'
-import { useState, useRef, useMemo, useEffect } from 'react';
+import { useState, useRef, useMemo, useEffect, Fragment } from 'react';
 import * as helper from '../utils/helpers'
 import FastPreview from './FastPreview';
 import ListFooter from './ListFooter';
+import * as Svg from './Svg';
 import LongText from './LongText';
 
 const sorts = ["name asc", "name desc", "size asc", "size desc"];
@@ -52,6 +53,18 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         }
     }, [selectedIndex, filesInPath, renderSize])
 
+    function handlePreviewClick() {
+        const selectedDiv = document.querySelector("div.selected");
+        if (!selectedDiv) return;
+        const maxIndex = Math.min(renderSize, filesInPath.length) - 1;
+        if (selectedIndex === 0) {
+            fileListRef.current.scrollTop = 0;
+        } else if (selectedIndex === maxIndex) {
+            fileListRef.current.scrollTop = fileListRef.current.scrollHeight;
+        } else {
+            selectedDiv.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+        }
+    }
     function handleShowMore(e) {
         e.preventDefault();
         setRenderSize(renderSize + defaultRenderSize);
@@ -114,16 +127,19 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         fileListRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    const logo = <Svg.Zip />;
+
     return (<>
         <div className='page archive'>
             <div className='title2'>
-                <div className='main' style={{ paddingLeft: "1rem" }}>
-                    <LongText title={name} onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{name}</LongText>
+                <div className='main'>
+                    <LongText title={name} logo=<Svg.Zip /> onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>
+                        {name}
+                    </LongText>
                 </div>
                 <button onClick={handleSortClick} tabIndex={1} title={"current: " + sorts[sortBy]}>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h240v80H120Zm0-200v-80h480v80H120Zm0-200v-80h720v80H120Z" /></svg>
+                    <Svg.Sort />
                 </button>
-
                 {sortMenuActive && (
                     <div ref={sortMenuRef} className='submenu'>
                         {sorts.map((sort, index) => (
@@ -160,6 +176,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         </div>
         {(selectedIndex >= 0) && (
             <FastPreview onFocus={() => setSortMenuActive(false)}
+                onTitleClick={handlePreviewClick}
                 onDownload={() => onDownload(filesInPath[selectedIndex])}
                 onFullscreen={() => onFullscreen(filesInPath[selectedIndex])}
                 file={filesInPath[selectedIndex]} />

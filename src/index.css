@@ -14,6 +14,7 @@
 }
 
 body {
+  text-size-adjust: none;
   background: #bbb;
 }
 
@@ -30,9 +31,12 @@ body {
   margin: 0rem;
 }
 
-
-
 @media (pointer: coarse) {}
+
+.filter2>div.inputButton:hover {
+  background: var(--color-hover);
+  border-color: #aaa;
+}
 
 button:focus:not(:active),
 div:focus,
@@ -141,7 +145,6 @@ div:focus,
   overflow: hidden;
   overflow-wrap: break-word;
   text-align: left;
-  xcolor: #555;
 }
 
 .fileRow>div:last-child {
@@ -167,17 +170,12 @@ button {
   user-select: none;
 }
 
-
-
 button:active {
-  xbox-shadow: inset 0 0 0 2px var(--color-selected);
-  xopacity: 0.5;
   background: var(--color-darkest);
   color: #fff;
 }
 
 .app>.page {
-  xborder: 0px solid var(--color-darkest);
   color: #fff;
   overflow-y: hidden;
   height: fit-content;
@@ -241,11 +239,6 @@ button:active {
 
 .filter2 input:focus {
   cursor: text;
-}
-
-.filter2>div.inputButton:hover {
-  background: var(--color-hover);
-  border-color: #aaa;
 }
 
 .filter2>div.inputButton:has(*:focus) {
@@ -390,10 +383,6 @@ pre {
   display: flex;
 }
 
-.title2>* {
-  xborder: 1px solid red;
-}
-
 .title2>div>button.selected {
   background: #fff;
   color: #000;
@@ -415,8 +404,8 @@ pre {
 
 .title2>button {
   background: transparent;
-  width: 46px;
-  padding: 0;
+  xwidth: 46px;
+  padding: 0 0.5rem;
 }
 
 .title2>div {
@@ -424,6 +413,8 @@ pre {
   display: flex;
   overflow: hidden;
 }
+
+.title2>div:has(span) {}
 
 /* .title2 button:active {
   color: var(--color-hover);
@@ -469,10 +460,7 @@ img {
 }
 
 .submenu>button.selected {
-  xbackground: blue !important;
   background: #fff;
-  xcolor: #fff !important;
-  xcolor: blue !important;
 }
 
 .submenu {
@@ -484,4 +472,11 @@ img {
   right: 0rem;
   padding: 0px !important;
   box-shadow: 0px 2px 0 0px rgba(0, 0, 0, 0.1);
+}
+
+.title2 span svg {
+  fill: #fff;
+  margin-top: -6px;
+  margin-bottom: -6px;
+  margin-right: 0.5rem;
 }

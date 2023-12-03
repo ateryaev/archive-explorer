@@ -9,7 +9,7 @@ const ListFooter = ({ current, total, unit, onMore }) => {
   } else if (current === 1) {
     status = "only 1 " + unit + " found";
   } else {
-    status = "&nbsp;";
+    status = <>&nbsp;</>;
   }
 
   return (

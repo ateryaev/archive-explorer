@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import * as Svg from './Svg';
 
 const LongText = ({ children, ...props }) => {
   const spanRef = useRef(null);
@@ -66,6 +67,7 @@ const LongText = ({ children, ...props }) => {
 
   return (
     <span ref={spanRef} {...props} onMouseOver={handleOver} onMouseLeave={handleLeave}>
+      {props.logo && <>{props.logo}</>}
       {children}
     </span>
   );
