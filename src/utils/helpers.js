@@ -114,6 +114,36 @@ export function toHexPreview(bytes, size) {
   return str;
 }
 
+export function filtersFromStr(filterStr) {
+  const filters = filterStr.toUpperCase().split(" ");
+  let filters2 = [];
+  const block = '"';
+  let inBlock = false;
+
+  filters.forEach((f) => {
+    let prefix = "";
+    if (f.slice(0, 1) === "!" && inBlock == false) {
+      f = f.slice(1);
+      prefix = '!';
+    }
+    if (f.slice(0, 1) === block && f.slice(-1) === block && f.length > 1 && inBlock == false) {
+      filters2.push(prefix + f.slice(1, -1));
+    } else if (f.slice(0, 1) === block && inBlock == false) {
+      inBlock = true;
+      filters2.push(prefix + f.slice(1));
+    } else if (f.slice(-1) === block && inBlock == true) {
+      inBlock = false;
+      filters2.push(filters2.pop() + " " + f.slice(0, -1));
+    } else if (inBlock == true) {
+      filters2.push(filters2.pop() + " " + f);
+    } else {
+      filters2.push(prefix + f);
+    }
+  });
+  console.log(filters2)
+  return filters2;
+}
+
 export function isTextMatchFilters(text, filters) {
   for (const f of filters) {
     if (f.length < 1) continue;

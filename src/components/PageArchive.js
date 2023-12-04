@@ -30,7 +30,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
 
     const filesInPath = useMemo(
         () => {
-            const filters = filter.toUpperCase().split(" ");
+            const filters = helper.filtersFromStr(filter);
             let filtered = files.filter((file) => {
                 return helper.isTextMatchFilters(file.name, filters);
             });

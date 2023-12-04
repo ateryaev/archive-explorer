@@ -77,7 +77,8 @@ const PagePreview = ({ file, onBack, onDownload }) => {
       const arr = file.bytes.slice(0, 1024 * 1024 * 50);//e.g. max 50Mb
       const fullText = enc.decode(arr);
       const lines = fullText.split("\n");
-      const filters = filter.toUpperCase().split(" ");
+      //const filters = filter.toUpperCase().split(" ");
+      const filters = helper.filtersFromStr(filter);
       let fullTextFiltered = "";
       let occurrence = 0;
       let resLen = 0;

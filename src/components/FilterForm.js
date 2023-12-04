@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 const FilterForm = ({ filter, onChange, children }) => {
     const [preFilter, setPreFilter] = useState(filter);
     const filterInputRef = useRef(null);
+    const helpStr = 'e.g. ORANGE !"GREEN APPLE" BANANA "2 RED CHERRIES"'
 
     useEffect(() => {
         setPreFilter(filter);
@@ -36,7 +37,7 @@ const FilterForm = ({ filter, onChange, children }) => {
                     tabIndex={1}
                     value={preFilter}
                     ref={filterInputRef}
-                    placeholder='no filter, try e.g. "apple banana !orange"'
+                    placeholder={helpStr}
                     onInput={handleInput}
                     type='text'
                     onKeyDown={handleKeyDown}
