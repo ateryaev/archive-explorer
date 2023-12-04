@@ -16,6 +16,7 @@ const FilterForm = ({ filter, onChange, children }) => {
     }
 
     function handleApply() {
+        filterInputRef.current.focus();
         if (preFilter === filter) return;
         onChange(preFilter);
     }
@@ -23,6 +24,7 @@ const FilterForm = ({ filter, onChange, children }) => {
     function handleClear() {
         setPreFilter("");
         onChange("");
+        filterInputRef.current.focus();
     }
 
     return (
@@ -41,7 +43,7 @@ const FilterForm = ({ filter, onChange, children }) => {
                     autoCorrect="off" autoCapitalize="none" spellCheck="false" autoComplete="off"
                 />
                 {(filter === preFilter && filter !== "") && (
-                    <button tabIndex={1} onClick={handleClear} className='clear'>reset</button>
+                    <button tabIndex={-1} onClick={handleClear} className='clear'>reset</button>
                 )}
                 {(filter !== preFilter) && (
                     <button tabIndex={1} onClick={handleApply}>apply</button>

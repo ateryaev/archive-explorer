@@ -290,21 +290,16 @@ button:active {
 
 button.clear {
   background: red;
-  transform: translate(0px, -1000px);
-  width: 1px;
-  padding: 0;
-  margin-left: -100px;
+  display: none;
 }
 
 button.clear:active {
   background: #000;
 }
 
-.filter2:has(*:focus) button.clear {
-  transform: translate(0px, 0px);
-  width: fit-content;
-  padding: 0.5rem;
-  margin-left: auto;
+.filter2:has(input:focus) button.clear,
+.filter2 button.clear:active {
+  display: block;
 }
 
 .credits {

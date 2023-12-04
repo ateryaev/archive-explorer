@@ -28,11 +28,11 @@ const FastPreview = ({ file, onDownload, onFullscreen, onTitleClick, ...props })
   }, [file]);
 
   return (
-    <div className='fastpreview' ref={scrollDivRef} {...props} tabIndex={1}>
+    <div className='fastpreview' ref={scrollDivRef} {...props} tabIndex={4}>
       <div>
         <LongText style={{ cursor: "pointer" }} onClick={onTitleClick}>{file.name}</LongText>
-        <button tabIndex={1} onClick={onDownload} title="download"><Svg.Download /></button>
-        <button tabIndex={1} onClick={onFullscreen} title="expand preview"><Svg.FullScreen /></button>
+        <button tabIndex={3} onClick={onDownload} title="download"><Svg.Download /></button>
+        <button tabIndex={3} onClick={onFullscreen} title="expand preview"><Svg.FullScreen /></button>
       </div>
       <pre>{textPresentation}</pre>
       <div>

@@ -81,6 +81,10 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
 
 
     function handleKeyDown(e) {
+        if (document.querySelector("input:focus") !== null) return;
+        if (document.querySelector("button:active") !== null) return;
+        if (document.querySelector("button:focus") !== null) return;
+
         if (filesInPath.length === 0) return;
         const maxIndex = Math.min(renderSize, filesInPath.length) - 1;
         let newSelectedIndex = selectedIndex;
@@ -89,17 +93,27 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         } else if (e.code === "ArrowDown") {
             newSelectedIndex = selectedIndex + 1;
         } else if (e.code === "Escape") {
+            if (selectedIndex === -1) {
+                fileListRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+            }
             setSelectedIndex(-1);
             return;
-            // } else if (e.code === "Enter" && selectedIndex > -1) {
-            //     onFullscreen(filesInPath[selectedIndex]);
-            //     return;
+        } else if (e.code === "Enter" && selectedIndex > -1) {
+            onFullscreen(filesInPath[selectedIndex]);
+            return;
+        } else if (e.code === "Space" || e.code === "PageDown") {
+            newSelectedIndex = selectedIndex + 10;
+            if (newSelectedIndex > maxIndex) newSelectedIndex = maxIndex;
+        } else if (e.code === "End") {
+            newSelectedIndex = maxIndex;
+        } else if (e.code === "Home") {
+            newSelectedIndex = 0;
         } else {
             return;
         }
         e.preventDefault();
         if (newSelectedIndex < 0) newSelectedIndex = maxIndex;
-        if (newSelectedIndex > maxIndex) newSelectedIndex = 0;
+        if (newSelectedIndex > maxIndex) newSelectedIndex = Math.min(maxIndex, 0);
         setSelectedIndex(newSelectedIndex);
     }
 
@@ -147,7 +161,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
                 )}
             </div>
 
-            <div className='filelist' ref={fileListRef} tabIndex={1}
+            <div className='filelist' ref={fileListRef} tabIndex={2}
                 onFocus={() => setSortMenuActive(false)}
                 onKeyDown={handleKeyDown}>
                 <FilterForm onChange={handleFilterApply} filter={filter}>
@@ -160,12 +174,11 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
                         <div>
                             {file.name}
                         </div>
-
                         <div>{helper.sizeToString(file.bytes.byteLength)}</div>
-
                     </div>
                 ))}
                 {Math.min(renderSize, filesInPath.length) === 0 && <div className="empty"><br />nothing was found<br /> change filter<br /><br /></div>}
+                <div></div>
                 <ListFooter
                     current={Math.min(renderSize, filesInPath.length)}
                     total={filesInPath.length} unit={"file"}
