@@ -37,7 +37,7 @@ const FilterForm = ({ filter, onChange, children }) => {
                     ref={filterInputRef}
                     placeholder='no filter, try e.g. "apple banana !orange"'
                     onInput={handleInput}
-                    type='email'
+                    type='text'
                     onKeyDown={handleKeyDown}
                     autoCorrect="off" autoCapitalize="none" spellCheck="false" autoComplete="off"
                 />

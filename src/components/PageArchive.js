@@ -127,8 +127,6 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         fileListRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    const logo = <Svg.Zip />;
-
     return (<>
         <div className='page archive'>
             <div className='title2'>

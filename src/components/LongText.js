@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import * as Svg from './Svg';
 
 const LongText = ({ children, ...props }) => {
   const spanRef = useRef(null);

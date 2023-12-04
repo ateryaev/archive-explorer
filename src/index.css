@@ -44,6 +44,13 @@ div:focus,
   outline: none;
 }
 
+.fileRow,
+button {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
 @media (hover: hover) {
 
   button.clear:hover:not(:active) {
@@ -54,7 +61,6 @@ div:focus,
   button:focus:not(:active),
   div:focus,
   .fileRow:focus {
-    user-select: none;
     box-shadow: inset 0 0 0 2px var(--color-hover);
     outline: none;
   }
@@ -170,9 +176,6 @@ button {
   fill: #fff;
   background: var(--color-selected);
   outline: 0;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  -webkit-user-select: none;
-  user-select: none;
 }
 
 button:active {
