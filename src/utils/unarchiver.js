@@ -56,7 +56,7 @@ function IsZip(bytes) {
 
 async function TryUnzip(bytes, filename, onProgress) {
     if (!IsZip(bytes)) return null;
-    onProgress("unpacking zip " + filename + "...");
+    onProgress("unpacking zip " + filename);
     let zip = null;
     let files = [];
     try {
@@ -83,7 +83,7 @@ function IsXz(bytes) {
 
 async function TryUnxz(bytes, filename, onProgress) {
     if (!IsXz(bytes)) return null;
-    onProgress("unpacking xz " + filename + "...");
+    onProgress("unpacking xz " + filename);
     let subfilename = filename.slice(filename.lastIndexOf("/") + 1);
     if (subfilename.slice(-3) === ".xz") {
         subfilename = subfilename.slice(0, -3);
@@ -111,7 +111,7 @@ function IsGzip(bytes) {
 
 async function TryUngz(bytes, filename, onProgress) {
     if (!IsGzip(bytes)) return null;
-    onProgress("unpacking gzip " + filename + "...");
+    onProgress("unpacking gzip " + filename);
     let subfilename = filename.slice(filename.lastIndexOf("/") + 1);
     if (subfilename.slice(-3) === ".gz") {
         subfilename = subfilename.slice(0, -3);
@@ -145,7 +145,7 @@ function IsTar(bytes) {
 
 async function TryUntar(uint8Array, filename, onProgress) {
     if (!IsTar(uint8Array)) return null;
-    onProgress("unpacking tar " + filename + "...");
+    onProgress("unpacking tar " + filename);
     try {
         const untarFiles = await untar(uint8Array.buffer);
         if (untarFiles.length < 1) return null;

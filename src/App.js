@@ -73,7 +73,6 @@ function App() {
 
   function handleFullscreen(file) {
     window.history.pushState(PAGE_PREVIEW, null);
-    console.log("handleFullscreen");
     setPreviewFile(file);
     setAppState(PAGE_PREVIEW);
   }

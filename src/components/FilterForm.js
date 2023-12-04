@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
 const FilterForm = ({ filter, onChange, children }) => {
-    //const [filter, setFilter] = useState(value);
     const [preFilter, setPreFilter] = useState(filter);
     const filterInputRef = useRef(null);
 

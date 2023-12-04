@@ -1,6 +1,7 @@
 import LongText from './LongText'
 import * as helper from '../utils/helpers'
 import { useState, useRef, useEffect } from 'react';
+import * as Svg from './Svg';
 
 const maxTxtSize = 1024 * 8;
 const maxHexSize = 1024;
@@ -30,12 +31,10 @@ const FastPreview = ({ file, onDownload, onFullscreen, onTitleClick, ...props })
     <div className='fastpreview' ref={scrollDivRef} {...props} tabIndex={1}>
       <div>
         <LongText style={{ cursor: "pointer" }} onClick={onTitleClick}>{file.name}</LongText>
-        <button tabIndex={1} onClick={onDownload} title="download"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" /></svg></button>
-        <button tabIndex={1} onClick={onFullscreen} title="expand preview"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z" /></svg></button>
+        <button tabIndex={1} onClick={onDownload} title="download"><Svg.Download /></button>
+        <button tabIndex={1} onClick={onFullscreen} title="expand preview"><Svg.FullScreen /></button>
       </div>
-      <pre>
-        {textPresentation}
-      </pre>
+      <pre>{textPresentation}</pre>
       <div>
         <span>{renderSize.toLocaleString()} of {file.bytes.byteLength.toLocaleString()} bytes shown</span>
       </div>

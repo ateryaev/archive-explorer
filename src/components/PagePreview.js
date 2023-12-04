@@ -3,9 +3,9 @@ import * as helper from '../utils/helpers'
 import { useState, useRef, useMemo, useEffect } from 'react';
 import ListFooter from './ListFooter';
 import LongText from './LongText';
+import * as Svg from './Svg';
 
 const defaultRenderSize = 1024 * 50;
-
 
 const PagePreview = ({ file, onBack, onDownload }) => {
   function getFileType(file) {
@@ -23,10 +23,6 @@ const PagePreview = ({ file, onBack, onDownload }) => {
   const [foundSize, setFoundSize] = useState(0);
   const [foundPreviewSize, setFoundPreviewSize] = useState(0);
   const [imgInfo, setImgInfo] = useState({ width: 0, height: 0 });
-
-  //const [previewRawText, setFoundSize] = useState(0);
-
-
 
   useEffect(() => {
   }, [file]);
@@ -49,9 +45,7 @@ const PagePreview = ({ file, onBack, onDownload }) => {
   const fileHex = useMemo(
     () => {
       if (previewAs !== "bin") return "N/A";
-      helper.log("HEX PREVIEW");
       const hex = helper.toHexPreview(file.bytes, renderHexSize);
-      helper.log(" HEX PREVIEW DONE");
       return hex;
     },
     [file, renderHexSize, /*renderSize,*/ previewAs]
@@ -80,7 +74,7 @@ const PagePreview = ({ file, onBack, onDownload }) => {
 
       helper.log("TEXT PREVIEW");
       const enc = new TextDecoder("utf-8");
-      const arr = file.bytes.slice(0, 1024 * 1024 * 30);//e.g. max 30Mb
+      const arr = file.bytes.slice(0, 1024 * 1024 * 50);//e.g. max 50Mb
       const fullText = enc.decode(arr);
       const lines = fullText.split("\n");
       const filters = filter.toUpperCase().split(" ");
@@ -121,32 +115,25 @@ const PagePreview = ({ file, onBack, onDownload }) => {
     previewRef.current.scrollTo({ top: 0, behavior: 'smooth' });
   }
   function handleImageLoad(e) {
-    //console.log(e.target.naturalHeight, e.target.naturalWidth)
     setImgInfo({ width: e.target.naturalWidth, height: e.target.naturalHeight, error: false });
   }
   function handleImageError(e) {
-    setImgInfo({ width: "???", height: "???", error: true });
-
+    setImgInfo({ width: "?", height: "?", error: true });
   }
 
   return (
     <div className='page'>
       <div className='title2'>
-        <button onClick={onBack} title="back" tabIndex="1">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M360-240 120-480l240-240 56 56-144 144h568v80H272l144 144-56 56Z" /></svg>
-        </button>
+        <button onClick={onBack} title="back" tabIndex="1"><Svg.Back /></button>
         <div className='main' style={{ padding: "0.5rem 0" }}>
           <LongText title={file.name} onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{file.name}</LongText>
-          {/* <span title={file.name} onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{file.name}</span> */}
         </div>
         <div title="preview as...">
           <button tabIndex="1" onClick={(e) => handlePreviewAs(e, "txt")} className={previewAs === "txt" ? 'selected' : ''}>txt</button>
           <button tabIndex="1" onClick={(e) => handlePreviewAs(e, "bin")} className={previewAs === "bin" ? 'selected' : ''}>bin</button>
           <button tabIndex="1" onClick={(e) => handlePreviewAs(e, "img")} className={previewAs === "img" ? 'selected' : ''}>img</button>
         </div>
-        <button tabIndex="1" onClick={() => onDownload(file)} title="download">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" /></svg>
-        </button>
+        <button tabIndex="1" onClick={() => onDownload(file)} title="download"><Svg.Download /></button>
 
       </div>
 

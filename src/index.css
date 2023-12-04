@@ -31,13 +31,6 @@ body {
   margin: 0rem;
 }
 
-@media (pointer: coarse) {}
-
-.filter2>div.inputButton:hover {
-  background: var(--color-hover);
-  border-color: #aaa;
-}
-
 button:focus:not(:active),
 div:focus,
 .fileRow:focus {
@@ -52,6 +45,10 @@ button {
 }
 
 @media (hover: hover) {
+  .filter2>div.inputButton:hover {
+    background: var(--color-hover);
+    border-color: #aaa;
+  }
 
   button.clear:hover:not(:active) {
     background: lightcoral;
@@ -330,6 +327,10 @@ pre {
   padding: 1rem;
 }
 
+.preview pre {
+  width: fit-content;
+}
+
 .preview {
   background: #ddd;
   overflow-y: scroll;
@@ -391,7 +392,7 @@ pre {
 .fastpreview pre {
   color: #000;
   padding: 0.5rem;
-  overflow: visible;
+  width: fit-content;
 }
 
 /* to keep file list same state while previewing */
