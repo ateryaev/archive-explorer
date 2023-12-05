@@ -34,11 +34,12 @@ const FastPreview = ({ file, onDownload, onFullscreen, onTitleClick, ...props })
         <button tabIndex={3} onClick={onDownload} title="download"><Svg.Download /></button>
         <button tabIndex={3} onClick={onFullscreen} title="expand preview"><Svg.FullScreen /></button>
       </div>
+
       <pre>{textPresentation}</pre>
       <div>
-        <span>{renderSize.toLocaleString()} of {file.bytes.byteLength.toLocaleString()} bytes shown</span>
+        <LongText>{renderSize.toLocaleString()} of {file.bytes.byteLength.toLocaleString()} bytes shown</LongText>
       </div>
-    </div>
+    </div >
   )
 };
 

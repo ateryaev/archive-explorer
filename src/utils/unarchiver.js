@@ -3,10 +3,11 @@ import untar from "js-untar";
 const JSZip = require("jszip");
 const pako = require('pako');
 
-export function FileInfo(name, bytes) {
+export function FileInfo(name, bytes, date) {
     return {
         name,
         bytes,
+        date,
         children: null
     }
 }
@@ -14,7 +15,7 @@ export function FileInfo(name, bytes) {
 async function unarchiveOne(file, onProgress) {
     const triers = [TryUngz, TryUnxz, TryUnzip, TryUntar];
     for (const trier of triers) {
-        file.children = await trier(file.bytes, file.name, onProgress);
+        file.children = await trier(file, onProgress);
         if (file.children !== null) return;
     }
 }
@@ -54,13 +55,13 @@ function IsZip(bytes) {
     return (bytes[0] === 0x50 && bytes[1] === 0x4B && bytes[2] === 0x03 && bytes[3] === 0x04);
 }
 
-async function TryUnzip(bytes, filename, onProgress) {
-    if (!IsZip(bytes)) return null;
-    onProgress("unpacking zip " + filename);
+async function TryUnzip(root, onProgress) {
+    if (!IsZip(root.bytes)) return null;
+    onProgress("unpacking zip " + root.name);
     let zip = null;
     let files = [];
     try {
-        zip = await JSZip.loadAsync(bytes.buffer);
+        zip = await JSZip.loadAsync(root.bytes.buffer);
         let entries = [];
         zip.forEach(function (relativePath, zipEntry) {
             if (zipEntry.dir) return;
@@ -68,7 +69,7 @@ async function TryUnzip(bytes, filename, onProgress) {
         });
         for (const entry of entries) {
             const subBytes = await entry.async("uint8array");
-            files.push(FileInfo(entry.name, subBytes));
+            files.push(FileInfo(entry.name, subBytes, entry.date));
         }
     } catch {
         return null;
@@ -81,16 +82,16 @@ function IsXz(bytes) {
     return (bytes[0] === 0xFD && bytes[1] === 0x37 && bytes[2] === 0x7A && bytes[3] === 0x58);
 }
 
-async function TryUnxz(bytes, filename, onProgress) {
-    if (!IsXz(bytes)) return null;
-    onProgress("unpacking xz " + filename);
-    let subfilename = filename.slice(filename.lastIndexOf("/") + 1);
+async function TryUnxz(root, onProgress) {
+    if (!IsXz(root.bytes)) return null;
+    onProgress("unpacking xz " + root.name);
+    let subfilename = root.name.slice(root.name.lastIndexOf("/") + 1);
     if (subfilename.slice(-3) === ".xz") {
         subfilename = subfilename.slice(0, -3);
     }
     const compressedStream = new ReadableStream({
         start(controller) {
-            controller.enqueue(bytes);
+            controller.enqueue(root.bytes);
             controller.close();
         },
     });
@@ -98,7 +99,7 @@ async function TryUnxz(bytes, filename, onProgress) {
         const stream = new XzReadableStream(compressedStream);
         const decompressedResponse = new Response(stream);
         const buffer = await decompressedResponse.arrayBuffer();
-        return [FileInfo(subfilename, new Uint8Array(buffer))];
+        return [FileInfo(subfilename, new Uint8Array(buffer), root.date)];
     } catch (e) {
         return null;
     }
@@ -109,15 +110,15 @@ function IsGzip(bytes) {
     return (bytes[0] === 0x1F && bytes[1] === 0x8B && bytes[2] === 0x08 && bytes[3] === 0x00);
 }
 
-async function TryUngz(bytes, filename, onProgress) {
-    if (!IsGzip(bytes)) return null;
-    onProgress("unpacking gzip " + filename);
-    let subfilename = filename.slice(filename.lastIndexOf("/") + 1);
+async function TryUngz(file, onProgress) {
+    if (!IsGzip(file.bytes)) return null;
+    onProgress("unpacking gzip " + file.name);
+    let subfilename = file.name.slice(file.name.lastIndexOf("/") + 1);
     if (subfilename.slice(-3) === ".gz") {
         subfilename = subfilename.slice(0, -3);
     }
     try {
-        return [FileInfo(subfilename, await pako.ungzip(bytes))];
+        return [FileInfo(subfilename, await pako.ungzip(file.bytes), file.date)];
     } catch (e) {
         return null;
     }
@@ -143,11 +144,11 @@ function IsTar(bytes) {
     return true;
 }
 
-async function TryUntar(uint8Array, filename, onProgress) {
-    if (!IsTar(uint8Array)) return null;
-    onProgress("unpacking tar " + filename);
+async function TryUntar(root, onProgress) {
+    if (!IsTar(root.bytes)) return null;
+    onProgress("unpacking tar " + root.name);
     try {
-        const untarFiles = await untar(uint8Array.buffer);
+        const untarFiles = await untar(root.bytes.buffer);
         if (untarFiles.length < 1) return null;
         if (isNaN(untarFiles[0].checksum)) return null;
         if (isNaN(untarFiles[0].size)) return null;
@@ -155,7 +156,8 @@ async function TryUntar(uint8Array, filename, onProgress) {
         let files = [];
         for (const file of untarFiles) {
             if (file.type !== "0") continue;
-            files.push(FileInfo(file.name, new Uint8Array(file.buffer)));
+            const date = new Date(file.mtime * 1000);
+            files.push(FileInfo(file.name, new Uint8Array(file.buffer), date));
         }
         return files;
     } catch (e) {

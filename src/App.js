@@ -46,10 +46,11 @@ function App() {
     setAppState(PAGE_LOADING, null);
     setArchiveName(file.name);
     onProgress("reading " + file.name);
+    console.log(file)
     try {
       const buffer = await file.arrayBuffer();
       const bytes = new Uint8Array(buffer);
-      let rootFile = FileInfo("", bytes);
+      let rootFile = FileInfo("", bytes, new Date(file.lastModified));
       await unarchive(rootFile, onProgress);
       let allfiles = rootFile.children === null ? [] : flatFiles(rootFile);
       allfiles.sort(function (a, b) { return a.name.localeCompare(b.name); })

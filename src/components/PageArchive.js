@@ -171,10 +171,16 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
                 {filesInPath.slice(0, renderSize).map((file, index) => (
                     <div key={index} className={selectedIndex === index ? 'fileRow selected' : 'fileRow'}
                         onClick={(e) => handleShowPreview(index, e)}>
-                        <div>
+                        <div className='name'>
                             {file.name}
                         </div>
-                        <div>{helper.sizeToString(file.bytes.byteLength)}</div>
+                        <div className='date'>
+                            {file.date.toLocaleString()}
+                        </div>
+                        <div className='size'>
+                            {("      " + helper.sizeToString(file.bytes.byteLength)).slice(-10).replaceAll(' ', '\u00A0')}
+                        </div>
+
                     </div>
                 ))}
                 {Math.min(renderSize, filesInPath.length) === 0 && <div className="empty"><br />nothing was found<br /> change filter<br /><br /></div>}

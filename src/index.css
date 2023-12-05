@@ -141,24 +141,62 @@ button {
 
 
 .fileRow {
-  display: grid;
-  grid-template-columns: auto 90px;
   padding: 0.5rem;
   color: #000;
   cursor: pointer;
   margin: 0 0.5rem;
+  display: flex;
+  gap: 1rem
 }
 
 .fileRow>div {
   overflow: hidden;
   overflow-wrap: break-word;
   text-align: left;
+  xborder: 1px solid red;
 }
 
-.fileRow>div:last-child {
+.fileRow>div.size,
+.fileRow>div.date {
   text-align: right;
   white-space: nowrap;
 }
+
+.fileRow>div.name {
+  flex: 1;
+}
+
+.fileRow>div.size,
+.fileRow>div.date {
+  width: fit-content;
+  opacity: 0.7;
+}
+
+@media screen and (max-width: 1024px) {
+  .fileRow {
+    flex-wrap: wrap;
+  }
+
+  .fileRow>div.name {
+    flex: auto;
+    width: 100%;
+  }
+
+  .fileRow>div.size,
+  .fileRow>div.date {
+    margin-top: -0.5rem;
+    padding-left: 0rem;
+    text-align: left;
+    font-size: smaller;
+  }
+
+  .fileRow>div.size {
+    text-align: right;
+    flex: 1;
+  }
+}
+
+@media screen and (max-width: 1280px) {}
 
 .dialog.drag {
   background: var(--color-hover);
@@ -453,22 +491,6 @@ img {
   color: #000;
 }
 
-@media screen and (max-width: 420px) {
-  .fileRow {
-    display: flex;
-    flex-direction: column !important;
-  }
-
-  .fileRow>div {
-    text-align: left;
-  }
-
-  .fileRow>div:last-child {
-    text-align: left;
-    font-size: smaller;
-  }
-}
-
 .submenu>button {
   width: 100% !important;
   text-align: left;
@@ -495,4 +517,20 @@ img {
   margin-top: -6px;
   margin-bottom: -6px;
   margin-right: 0.5rem;
+}
+
+
+@media screen and (max-width: 601px) {
+  .filter2>div:first-child {
+    display: none;
+  }
+
+  .infopanel.filter2 {
+    padding-left: 1rem;
+  }
+
+  .filter2 input::placeholder {
+    opacity: 0.5;
+    transform: translate(0, 0);
+  }
 }

@@ -122,19 +122,19 @@ export function filtersFromStr(filterStr) {
 
   filters.forEach((f) => {
     let prefix = "";
-    if (f.slice(0, 1) === "!" && inBlock == false) {
+    if (f.slice(0, 1) === "!" && inBlock === false) {
       f = f.slice(1);
       prefix = '!';
     }
-    if (f.slice(0, 1) === block && f.slice(-1) === block && f.length > 1 && inBlock == false) {
+    if (f.slice(0, 1) === block && f.slice(-1) === block && f.length > 1 && inBlock === false) {
       filters2.push(prefix + f.slice(1, -1));
-    } else if (f.slice(0, 1) === block && inBlock == false) {
+    } else if (f.slice(0, 1) === block && inBlock === false) {
       inBlock = true;
       filters2.push(prefix + f.slice(1));
-    } else if (f.slice(-1) === block && inBlock == true) {
+    } else if (f.slice(-1) === block && inBlock === true) {
       inBlock = false;
       filters2.push(filters2.pop() + " " + f.slice(0, -1));
-    } else if (inBlock == true) {
+    } else if (inBlock === true) {
       filters2.push(filters2.pop() + " " + f);
     } else {
       filters2.push(prefix + f);
