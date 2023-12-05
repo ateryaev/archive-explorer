@@ -140,7 +140,6 @@ export function filtersFromStr(filterStr) {
       filters2.push(prefix + f);
     }
   });
-  console.log(filters2)
   return filters2;
 }
 

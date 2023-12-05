@@ -69,7 +69,12 @@ async function TryUnzip(root, onProgress) {
         });
         for (const entry of entries) {
             const subBytes = await entry.async("uint8array");
-            files.push(FileInfo(entry.name, subBytes, entry.date));
+            let fi = FileInfo(entry.name, subBytes, entry.date);
+            if (!subBytes) {
+                fi.bytes = new Uint8Array();
+                fi.error = "unzip error";
+            }
+            files.push(fi);
         }
     } catch {
         return null;
@@ -99,6 +104,10 @@ async function TryUnxz(root, onProgress) {
         const stream = new XzReadableStream(compressedStream);
         const decompressedResponse = new Response(stream);
         const buffer = await decompressedResponse.arrayBuffer();
+        if (!buffer) {
+            root.error = "unxz failure";
+            return null;
+        }
         return [FileInfo(subfilename, new Uint8Array(buffer), root.date)];
     } catch (e) {
         return null;
@@ -110,15 +119,20 @@ function IsGzip(bytes) {
     return (bytes[0] === 0x1F && bytes[1] === 0x8B && bytes[2] === 0x08 && bytes[3] === 0x00);
 }
 
-async function TryUngz(file, onProgress) {
-    if (!IsGzip(file.bytes)) return null;
-    onProgress("unpacking gzip " + file.name);
-    let subfilename = file.name.slice(file.name.lastIndexOf("/") + 1);
+async function TryUngz(root, onProgress) {
+    if (!IsGzip(root.bytes)) return null;
+    onProgress("unpacking gzip " + root.name);
+    let subfilename = root.name.slice(root.name.lastIndexOf("/") + 1);
     if (subfilename.slice(-3) === ".gz") {
         subfilename = subfilename.slice(0, -3);
     }
     try {
-        return [FileInfo(subfilename, await pako.ungzip(file.bytes), file.date)];
+        const bytes = await pako.ungzip(root.bytes);
+        if (!bytes) {
+            root.error = "ungz failure";
+            return null;
+        }
+        return [FileInfo(subfilename, bytes, root.date)];
     } catch (e) {
         return null;
     }

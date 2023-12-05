@@ -37,6 +37,7 @@ function App() {
 
   let logs = [];
   function onProgress(msg) {
+    console.log(msg);
     logs.push(msg);
     logs = logs.slice(-10);
     setLoadingLogs(logs);
@@ -59,6 +60,7 @@ function App() {
         allfiles = [rootFile];
       }
       setFiles(allfiles);
+      console.log(allfiles);
       setAppState(PAGE_ARCHIVE);
       window.history.pushState(PAGE_ARCHIVE, null);
     } catch (e) {
