@@ -3,12 +3,6 @@ export function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-// export function log(msg) {
-//   const now = new Date();
-//   const time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "." + now.getMilliseconds();
-//   console.log(time, msg);
-// }
-
 export function isSymbolChar(byte) {
   return (byte >= 32 && byte <= 126);
 }
@@ -144,4 +138,3 @@ export function isTextMatchFilters(text, filters) {
   return true;
 }
 
-export default isSymbolChar;

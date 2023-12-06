@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import * as helper from '../utils/helpers'
 
 const FileTableRow = ({ file, selected, ...props }) => {
