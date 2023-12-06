@@ -30,13 +30,11 @@ const PagePreview = ({ file, onBack, onDownload }) => {
   const fileUrl = useMemo(
     () => {
       if (previewAs !== "img") return "";
-      helper.log("IMG PREVIEW");
       const fullName = file.name;
       const downloadName = fullName.slice(fullName.lastIndexOf("/") + 1);
       const dataView = new DataView(file.bytes.buffer);
       const blob = new Blob([dataView]);
       const downloadUrl = URL.createObjectURL(blob, downloadName);
-      helper.log(" IMG PREVIEW DONE");
       return downloadUrl;
     },
     [file, previewAs]
@@ -72,7 +70,6 @@ const PagePreview = ({ file, onBack, onDownload }) => {
         return helper.toTxtPreview(file.bytes, renderSize);
       }
 
-      helper.log("TEXT PREVIEW");
       const enc = new TextDecoder("utf-8");
       const arr = file.bytes.slice(0, 1024 * 1024 * 50);//e.g. max 50Mb
       const fullText = enc.decode(arr);
@@ -100,7 +97,6 @@ const PagePreview = ({ file, onBack, onDownload }) => {
       setFoundSize(resLen - 1);
       setFoundPreviewSize(resPreviewLen - 1);
 
-      helper.log(" TEXT PREVIEW DONE");
       return fullTextFiltered;
     },
     [file, filter, renderSize, previewAs]

@@ -9,7 +9,6 @@ const PageStart = ({ onFileSelected }) => {
     if (e.target.files.length === 0) return;
     const inputFile = e.target.files[0];
     onFileSelected(inputFile);
-    console.log(inputFile.name);
   }
 
   function handleClick() {

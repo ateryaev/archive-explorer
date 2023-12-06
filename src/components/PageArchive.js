@@ -1,18 +1,21 @@
 import FilterForm from './FilterForm'
-import { useState, useRef, useMemo, useEffect, Fragment } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import * as helper from '../utils/helpers'
 import FastPreview from './FastPreview';
 import ListFooter from './ListFooter';
 import * as Svg from './Svg';
 import LongText from './LongText';
+import FileTableRow from './FileTableRow';
+import SortByMenu from './SortByMenu';
 
-const sorts = ["name asc", "name desc", "size asc", "size desc"];
 const defaultRenderSize = 500;
 
-function sortFiles(filesToSort, sortByIndex) {
-    const compMult = sorts[sortByIndex].indexOf("desc") > 0 ? -1 : 1;
-    if (sorts[sortByIndex].slice(0, 4) === "size") {
+function sortFiles(filesToSort, field, order) {
+    const compMult = order === "desc" ? -1 : 1;
+    if (field === "size") {
         filesToSort.sort(function (a, b) { return compMult * (a.bytes.byteLength - b.bytes.byteLength); });
+    } else if (field === "date") {
+        filesToSort.sort(function (a, b) { return compMult * (a.date.valueOf() - b.date.valueOf()); });
     } else {
         filesToSort.sort(function (a, b) { return compMult * a.name.localeCompare(b.name); })
     }
@@ -23,9 +26,9 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
     const [renderSize, setRenderSize] = useState(defaultRenderSize);
     const [sortMenuActive, setSortMenuActive] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
-    const [sortBy, setSortBy] = useState(0);
+    const [sortField, setSortField] = useState("name");
+    const [sortOrder, setSortOrder] = useState("asc");
 
-    const sortMenuRef = useRef(null);
     const fileListRef = useRef(null);
 
     const filesInPath = useMemo(
@@ -34,10 +37,10 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
             let filtered = files.filter((file) => {
                 return helper.isTextMatchFilters(file.name, filters);
             });
-            sortFiles(filtered, sortBy);
+            sortFiles(filtered, sortField, sortOrder);
             return filtered;
         },
-        [files, filter, sortBy]
+        [files, filter, sortField, sortOrder]
     );
 
     useEffect(() => {
@@ -77,8 +80,6 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
             setSelectedIndex(index);
         }
     }
-
-
 
     function handleKeyDown(e) {
         if (document.querySelector("input:focus") !== null) return;
@@ -129,12 +130,9 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
         fileListRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function handleSortClick() {
-        setSortMenuActive(!sortMenuActive);
-    }
-
-    function handleSort(index) {
-        setSortBy(index);
+    function handleSortChange(f, o) {
+        setSortField(f);
+        setSortOrder(o);
         setSelectedIndex(-1);
         setSortMenuActive(false);
         fileListRef.current.focus();
@@ -149,15 +147,11 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
                         {name}
                     </LongText>
                 </div>
-                <button onClick={handleSortClick} tabIndex={1} title={"current: " + sorts[sortBy]}>
+                <button onClick={() => { setSortMenuActive(!sortMenuActive); }} tabIndex={1} title={"current: " + sortField + " " + sortOrder}>
                     <Svg.Sort />
                 </button>
                 {sortMenuActive && (
-                    <div ref={sortMenuRef} className='submenu'>
-                        {sorts.map((sort, index) => (
-                            <button tabIndex="1" key={index} onClick={() => handleSort(index)} className={sortBy === index ? "selected" : ""}>{sort}</button>
-                        ))}
-                    </div>
+                    <SortByMenu field={sortField} order={sortOrder} onChange={handleSortChange} />
                 )}
             </div>
 
@@ -167,21 +161,8 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
                 <FilterForm onChange={handleFilterApply} filter={filter}>
                     {filesInPath.length.toLocaleString()} files
                 </FilterForm>
-
                 {filesInPath.slice(0, renderSize).map((file, index) => (
-                    <div key={index} className={selectedIndex === index ? 'fileRow selected' : 'fileRow'}
-                        onClick={(e) => handleShowPreview(index, e)}>
-                        <div className='name'>
-                            {file.name}
-                        </div>
-                        <div className='date'>
-                            {file.date.toLocaleString()}
-                        </div>
-                        <div className='size'>
-                            {("      " + helper.sizeToString(file.bytes.byteLength)).slice(-10).replaceAll(' ', '\u00A0')}
-                        </div>
-
-                    </div>
+                    <FileTableRow key={index} onMouseDown={() => handleShowPreview(index)} file={file} selected={selectedIndex === index} />
                 ))}
                 {Math.min(renderSize, filesInPath.length) === 0 && <div className="empty"><br />nothing was found<br /> change filter<br /><br /></div>}
                 <div></div>

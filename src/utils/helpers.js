@@ -3,11 +3,11 @@ export function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-export function log(msg) {
-  const now = new Date();
-  const time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "." + now.getMilliseconds();
-  console.log(time, msg);
-}
+// export function log(msg) {
+//   const now = new Date();
+//   const time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "." + now.getMilliseconds();
+//   console.log(time, msg);
+// }
 
 export function isSymbolChar(byte) {
   return (byte >= 32 && byte <= 126);
@@ -31,18 +31,6 @@ export function sizeToString(filesize) {
   if (unitCount.toFixed(1).slice(-2) === ".0") decimals = 0;
 
   return unitCount.toFixed(decimals) + unitNames[unitIndex];
-}
-
-export function sizeToBytesString(filesize) {
-  let sizeStr = filesize + "";
-  let newStr = "";
-
-  while (sizeStr !== "") {
-    newStr = sizeStr.slice(-3) + "," + newStr;
-    sizeStr = sizeStr.slice(0, -3);
-  }
-
-  return newStr.slice(0, -1) + " bytes";
 }
 
 export function Download(bytes, filename) {

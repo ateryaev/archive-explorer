@@ -184,7 +184,7 @@ button {
 
   .fileRow>div.size,
   .fileRow>div.date {
-    margin-top: -0.5rem;
+    margin-top: -0.8rem;
     padding-left: 0rem;
     text-align: left;
     font-size: smaller;
@@ -499,6 +499,17 @@ img {
 
 .submenu>button.selected {
   background: #fff;
+}
+
+.submenu button svg {
+  display: inline-block;
+  margin: -8px;
+  padding: 3px;
+  fill: #000;
+}
+
+.submenu button.desc svg {
+  transform: rotate(180deg);
 }
 
 .submenu {

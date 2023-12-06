@@ -39,7 +39,7 @@ function App() {
   function onProgress(msg) {
     console.log(msg);
     logs.push(msg);
-    logs = logs.slice(-10);
+    logs = logs.slice(-6);
     setLoadingLogs(logs);
   }
 
@@ -47,20 +47,32 @@ function App() {
     setAppState(PAGE_LOADING, null);
     setArchiveName(file.name);
     onProgress("reading " + file.name);
-    console.log(file)
+    console.time("Reading");
     try {
       const buffer = await file.arrayBuffer();
       const bytes = new Uint8Array(buffer);
-      let rootFile = FileInfo("", bytes, new Date(file.lastModified));
+      let rootFile = FileInfo(file.name, bytes, new Date(file.lastModified));
+      console.timeEnd("Reading");
+      console.time("Unarchiving");
       await unarchive(rootFile, onProgress);
       let allfiles = rootFile.children === null ? [] : flatFiles(rootFile);
       allfiles.sort(function (a, b) { return a.name.localeCompare(b.name); })
+      let uncompressedSize = 0;
+      allfiles.forEach((f) => {
+        f.name = f.name.slice(file.name.length + 1);
+        uncompressedSize += f.bytes.byteLength;
+      })
       if (allfiles.length === 0) {
         rootFile.name = file.name;
         allfiles = [rootFile];
       }
       setFiles(allfiles);
-      console.log(allfiles);
+      console.timeEnd("Unarchiving");
+      console.log("Processed archive: " + file.name);
+      console.log("Archive size: " + helper.sizeToString(file.size));
+      console.log("Files in archive: " + allfiles.length);
+      console.log("Content size: " + helper.sizeToString(uncompressedSize));
+
       setAppState(PAGE_ARCHIVE);
       window.history.pushState(PAGE_ARCHIVE, null);
     } catch (e) {
