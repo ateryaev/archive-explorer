@@ -158,7 +158,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
             <div className='filelist' ref={fileListRef} tabIndex={2}
                 onFocus={() => setSortMenuActive(false)}
                 onKeyDown={handleKeyDown}>
-                <FilterForm onChange={handleFilterApply} filter={filter}>
+                <FilterForm onChange={handleFilterApply} filter={filter} name="pagearchive">
                     {filesInPath.length.toLocaleString()} files
                 </FilterForm>
                 {filesInPath.slice(0, renderSize).map((file, index) => (

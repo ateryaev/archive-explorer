@@ -136,7 +136,7 @@ const PagePreview = ({ file, onBack, onDownload }) => {
 
       <div className='preview' ref={previewRef}>
         {(previewAs === "txt") && (
-          <FilterForm filter={filter} onChange={handleFilter} key={file.name}>
+          <FilterForm filter={filter} onChange={handleFilter} key={file.name} name="pagepreview">
             {filter.trim() === "" && <>{helper.sizeToString(file.bytes.byteLength)}</>}
             {filter.trim() !== "" && <>{linesFound.toLocaleString()} lines</>}
           </FilterForm>)}
