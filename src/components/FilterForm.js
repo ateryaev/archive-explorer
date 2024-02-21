@@ -9,6 +9,7 @@ function HistoryList(id) {
         if (historyItem === "") return;
         storedHistory = storedHistory.filter((word) => word !== historyItem);
         storedHistory.push(historyItem);
+        storedHistory = storedHistory.slice(-100);
         localStorage.setItem(key, JSON.stringify(storedHistory));
     }
     this.all = () => { return storedHistory.slice(); }
@@ -25,7 +26,6 @@ const FilterForm = ({ filter, onChange, children, name }) => {
     const historyList = new HistoryList(name);
 
     useEffect(() => {
-
         historyList.push(filter);
         let storedHistory = historyList.all();
         storedHistory.push("");
