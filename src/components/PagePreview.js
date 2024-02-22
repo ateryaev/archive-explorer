@@ -7,7 +7,7 @@ import * as Svg from './Svg';
 
 const defaultRenderSize = 1024 * 50;
 
-const PagePreview = ({ file, onBack, onDownload }) => {
+const PagePreview = ({ file, onBack, onDownload, onPrev, onNext }) => {
   function getFileType(file) {
     if (helper.testIfText(file.bytes)) return "txt";
     if (helper.testIfImage(file.name)) return "img";
@@ -124,6 +124,15 @@ const PagePreview = ({ file, onBack, onDownload }) => {
         <button onClick={onBack} title="back" tabIndex="1"><Svg.Back /></button>
         <div className='main' style={{ padding: "0.5rem 0" }}>
           <LongText title={file.name} onMouseDown={handleTitleClick} style={{ cursor: "pointer" }}>{file.name}</LongText>
+
+        </div>
+        <div className='prevnext'>
+          <button tabIndex="1" onClick={onPrev}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="12" viewBox="0 -960 960 960" width="12"><path d="m291-336-51-51 240-240 240 240-51 51-189-189-189 189Z" /></svg>
+          </button>
+          <button tabIndex="1" onClick={onNext}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="12" viewBox="0 -960 960 960" width="12"><path d="M480-333 240-573l51-51 189 189 189-189 51 51-240 240Z" /></svg>
+          </button>
         </div>
         <div title="preview as...">
           <button tabIndex="1" onClick={(e) => handlePreviewAs(e, "txt")} className={previewAs === "txt" ? 'selected' : ''}>txt</button>

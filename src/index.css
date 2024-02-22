@@ -481,6 +481,23 @@ pre {
   text-overflow: ellipsis;
 }
 
+.title2>div.prevnext {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  justify-content: center;
+}
+
+.title2>div.prevnext>button {
+  padding: 0 0rem;
+  font-size: smaller;
+  background: transparent;
+  height: 12px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+}
+
 img {
   max-width: calc(100% - 2rem);
   border: 2px solid #777;

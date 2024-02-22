@@ -100,7 +100,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
             setSelectedIndex(-1);
             return;
         } else if (e.code === "Enter" && selectedIndex > -1) {
-            onFullscreen(filesInPath[selectedIndex]);
+            onFullscreen(filesInPath, selectedIndex);
             return;
         } else if (e.code === "Space" || e.code === "PageDown") {
             newSelectedIndex = selectedIndex + 10;
@@ -176,7 +176,7 @@ const PageArchive = ({ name, files, onDownload, onFullscreen }) => {
             <FastPreview onFocus={() => setSortMenuActive(false)}
                 onTitleClick={handlePreviewClick}
                 onDownload={() => onDownload(filesInPath[selectedIndex])}
-                onFullscreen={() => onFullscreen(filesInPath[selectedIndex])}
+                onFullscreen={() => onFullscreen(filesInPath, selectedIndex)}
                 file={filesInPath[selectedIndex]} />
         )}
     </>

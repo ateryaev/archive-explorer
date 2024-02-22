@@ -16,7 +16,8 @@ function App() {
 
   const [appState, setAppState] = useState(PAGE_START);
   const [files, setFiles] = useState([]);
-  const [previewFile, setPreviewFile] = useState(null);
+  const [previewFiles, setPreviewFiles] = useState([]);
+  const [previewIndex, setPreviewIndex] = useState(-1);
   const [archiveName, setArchiveName] = useState("");
   const [loadingLogs, setLoadingLogs] = useState([]);
 
@@ -86,10 +87,20 @@ function App() {
     helper.Download(file.bytes, file.name);
   }
 
-  function handleFullscreen(file) {
+  function handleFullscreen(files, index) {
     window.history.pushState(PAGE_PREVIEW, null);
-    setPreviewFile(file);
+    setPreviewFiles(files);
+    setPreviewIndex(index);
     setAppState(PAGE_PREVIEW);
+  }
+  function handleNext() {
+    if (previewIndex >= previewFiles.length - 1) return;
+    setPreviewIndex(previewIndex + 1);
+  }
+
+  function handlePrev() {
+    if (previewIndex <= 0) return;
+    setPreviewIndex(previewIndex - 1);
   }
 
   function handleBack() {
@@ -102,7 +113,7 @@ function App() {
       {appState === PAGE_START && (<PageStart onFileSelected={handleFileSelected} />)}
       {appState === PAGE_LOADING && (<PageLoading name={archiveName} logs={loadingLogs} />)}
       {(appState === PAGE_ARCHIVE || appState === PAGE_PREVIEW) && (<PageArchive onDownload={handleDownload} onFullscreen={handleFullscreen} name={archiveName} files={files} />)}
-      {appState === PAGE_PREVIEW && (<PagePreview onBack={handleBack} onDownload={handleDownload} file={previewFile} />)}
+      {appState === PAGE_PREVIEW && (<PagePreview onBack={handleBack} onDownload={handleDownload} file={previewFiles[previewIndex]} onNext={handleNext} onPrev={handlePrev} />)}
       {appState !== PAGE_ARCHIVE && appState !== PAGE_PREVIEW && (<Credits />)}
     </div>)
 }
